@@ -10,16 +10,16 @@ notifications:
 
 cache:
   directories:
-    - starstruck-convex
+    - inthezone-convex
 
 before_install:
   -
-    if [ -e "starstruck-convex/image.tar" ]; then
-      docker load -i "starstruck-convex/image.tar";
+    if [ -e "inthezone-convex/image.tar" ]; then
+      docker load -i "inthezone-convex/image.tar";
     else
-      docker build -t "starstruck-convex" -f Dockerfile .;
-      mkdir -p "starstruck-convex"; docker save -o "starstruck-convex/image.tar" "starstruck-convex";
+      docker build -t "inthezone-convex" -f Dockerfile .;
+      mkdir -p "inthezone-convex"; docker save -o "inthezone-convex/image.tar" "inthezone-convex";
     fi
 
 script:
-  - docker run -v `pwd`:/build "starstruck-convex" sh -c 'make'
+  - docker run -v `pwd`:/build "inthezone-convex" sh -c 'make'

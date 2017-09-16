@@ -1,6 +1,6 @@
-# Starstruck ConVEX project
+# In the Zone ConVEX project
 
-[![Build Status](https://travis-ci.org/TopSecretRobotics/starstruck-convex.svg?branch=master)](https://travis-ci.org/TopSecretRobotics/starstruck-convex)
+[![Build Status](https://travis-ci.org/TopSecretRobotics/inthezone-convex.svg?branch=master)](https://travis-ci.org/TopSecretRobotics/inthezone-convex)
 
 This project expects [PROS](http://pros.cs.purdue.edu/) to be installed and available in the `PATH`.
 
@@ -33,8 +33,8 @@ On Windows, you will need to download [PuTTY](http://www.chiark.greenend.org.uk/
 Usage with docker:
 
 ```bash
-docker build -t "starstruck-convex" -f Dockerfile .
-docker run --rm -v `pwd`:/build "starstruck-convex" make
+docker build -t "inthezone-convex" -f Dockerfile .
+docker run --rm -v `pwd`:/build "inthezone-convex" make
 ```
 
 Usage with docker-compose:
