@@ -53,13 +53,18 @@
 #include "smartmotor.h"
 
 // Digital I/O configuration
-static vexDigiCfg dConfig[kVexDigital_Num] = {
-    {kVexDigital_1, kVexSensorDigitalOutput, kVexConfigOutput, 0}, {kVexDigital_2, kVexSensorDigitalOutput, kVexConfigOutput, 0},
-    {kVexDigital_3, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_4, kVexSensorDigitalInput, kVexConfigInput, 0},
-    {kVexDigital_5, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_6, kVexSensorDigitalInput, kVexConfigInput, 0},
-    {kVexDigital_7, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_8, kVexSensorDigitalInput, kVexConfigInput, 0},
-    {kVexDigital_9, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_10, kVexSensorDigitalInput, kVexConfigInput, 0},
-    {kVexDigital_11, kVexSensorDigitalInput, kVexConfigInput, 0},  {kVexDigital_12, kVexSensorDigitalInput, kVexConfigInput, 0}};
+static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalOutput, kVexConfigOutput, 0},
+                                              {kVexDigital_2, kVexSensorDigitalOutput, kVexConfigOutput, 0},
+                                              {kVexDigital_3, kVexSensorDigitalInput, kVexConfigInput, 0},
+                                              {kVexDigital_4, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
+                                              {kVexDigital_5, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
+                                              {kVexDigital_6, kVexSensorDigitalInput, kVexConfigInput, 0},
+                                              {kVexDigital_7, kVexSensorDigitalInput, kVexConfigInput, 0},
+                                              {kVexDigital_8, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_1},
+                                              {kVexDigital_9, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_1},
+                                              {kVexDigital_10, kVexSensorDigitalInput, kVexConfigInput, 0},
+                                              {kVexDigital_11, kVexSensorDigitalInput, kVexConfigInput, 0},
+                                              {kVexDigital_12, kVexSensorDigitalInput, kVexConfigInput, 0}};
 
 // Port 1 has no power expander
 // port 9 SW
