@@ -1,3 +1,5 @@
+// -*- mode: c; tab-width: 4; indent-tabs-mode: nil; st-rulers: [132] -*-
+// vim: ts=4 sw=4 ft=c et
 /*-----------------------------------------------------------------------------*/
 /*                                                                             */
 /*                        Copyright (c) James Pearman                          */
@@ -40,7 +42,6 @@
 /*                                                                             */
 /*-----------------------------------------------------------------------------*/
 
-
 #include <string.h>
 
 #include "ch.h"
@@ -57,105 +58,101 @@
 /*-----------------------------------------------------------------------------*/
 
 static void
-cmd_apollo( vexStream *chp, int argc, char *argv[])
+cmd_apollo(vexStream *chp, int argc, char *argv[])
 {
-	(void)argc;
-	(void)argv;
+    (void)argc;
+    (void)argv;
 
-	apolloInit();
+    apolloInit();
 
-	// run until any key press
-	while( sdGetWouldBlock((SerialDriver *)chp) ) {
-		apolloUpdate();
-	}
+    // run until any key press
+    while (sdGetWouldBlock((SerialDriver *)chp)) {
+        apolloUpdate();
+    }
 
-	apolloDeinit();
+    apolloDeinit();
 }
 
 static void
 cmd_sm(vexStream *chp, int argc, char *argv[])
 {
-	(void)argv;
-	(void)chp;
-	(void)argc;
+    (void)argv;
+    (void)chp;
+    (void)argc;
 
-	while( sdGetWouldBlock((SerialDriver *)chp) ) {
-		SmartMotorDebugStatus();
-		vexSleep( 1000 );
-	}
+    while (sdGetWouldBlock((SerialDriver *)chp)) {
+        SmartMotorDebugStatus();
+        vexSleep(1000);
+    }
 }
 
 #define SHELL_WA_SIZE THD_WA_SIZE(512)
 
 // Shell command
-static const ShellCommand commands[] = {
-	{"adc",		vexAdcDebug},
-	{"spi",		vexSpiDebug},
-	{"motor",	vexMotorDebug},
-	{"lcd",		vexLcdDebug},
-	{"enc",		vexEncoderDebug},
-	{"son",		vexSonarDebug},
-	{"ime",		vexIMEDebug},
-	{"test",	vexTestDebug},
-	{"sm",		cmd_sm},
-	{"apollo",	cmd_apollo},
-	{NULL,		NULL}
-};
+static const ShellCommand commands[] = {{"adc", vexAdcDebug},
+                                        {"spi", vexSpiDebug},
+                                        {"motor", vexMotorDebug},
+                                        {"lcd", vexLcdDebug},
+                                        {"enc", vexEncoderDebug},
+                                        {"son", vexSonarDebug},
+                                        {"ime", vexIMEDebug},
+                                        {"test", vexTestDebug},
+                                        {"sm", cmd_sm},
+                                        {"apollo", cmd_apollo},
+                                        {NULL, NULL}};
 
 // configuration for the shell
-static const ShellConfig shell_cfg1 = {
-	(vexStream *)SD_CONSOLE,
-	commands
-};
+static const ShellConfig shell_cfg1 = {(vexStream *)SD_CONSOLE, commands};
 
 /*-----------------------------------------------------------------------------*/
 //  Application entry point.                             */
 /*-----------------------------------------------------------------------------*/
 
-int main(void)
+int
+main(void)
 {
-	Thread *shelltp = NULL;
-	short timeout = 0;
+    Thread *shelltp = NULL;
+    short timeout = 0;
 
-	// System initializations.
-	// - HAL initialization, this also initializes the configured device drivers
-	//   and performs the board-specific initializations.
-	// - Kernel initialization, the main() function becomes a thread and the
-	//   RTOS is active.
-	halInit();
-	chSysInit();
+    // System initializations.
+    // - HAL initialization, this also initializes the configured device drivers
+    //   and performs the board-specific initializations.
+    // - Kernel initialization, the main() function becomes a thread and the
+    //   RTOS is active.
+    halInit();
+    chSysInit();
 
-	// Set the Team Name
-	vexSpiTeamnameSet("TopSecret");
+    // Set the Team Name
+    vexSpiTeamnameSet("TopSecret");
 
-	// Init the serial port associated with the console
-	vexConsoleInit();
+    // Init the serial port associated with the console
+    vexConsoleInit();
 
-	// Init VEX
-	vexCortexInit();
+    // Init VEX
+    vexCortexInit();
 
-	// wait for good spi comms
-	while( vexSpiGetOnlineStatus() == 0 ) {
-		// wait for a while
-		chThdSleepMilliseconds(100);
-		// dump after 5 seconds
-		if (timeout++ == 50) {
-			break;
-		}
-	}
+    // wait for good spi comms
+    while (vexSpiGetOnlineStatus() == 0) {
+        // wait for a while
+        chThdSleepMilliseconds(100);
+        // dump after 5 seconds
+        if (timeout++ == 50) {
+            break;
+        }
+    }
 
-	// Shell manager initialization.
-	shellInit();
+    // Shell manager initialization.
+    shellInit();
 
-	// Spin in loop monitoring the shell
-	while (TRUE) {
-		if (!shelltp) {
-			shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
-		} else if (chThdTerminated(shelltp)) {
-			chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
-			shelltp = NULL;           /* Triggers spawning of a new shell.        */
-		}
+    // Spin in loop monitoring the shell
+    while (TRUE) {
+        if (!shelltp) {
+            shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
+        } else if (chThdTerminated(shelltp)) {
+            chThdRelease(shelltp); /* Recovers memory of the previous shell.   */
+            shelltp = NULL;        /* Triggers spawning of a new shell.        */
+        }
 
-		chThdSleepMilliseconds(50);
-	}
+        chThdSleepMilliseconds(50);
+    }
 }

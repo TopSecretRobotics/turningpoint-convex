@@ -1,4 +1,4 @@
-.PHONY: all app clean deps flash lsusb shell windocker
+.PHONY: all app clean deps flash format lsusb shell windocker
 
 # Verbosity.
 
@@ -53,6 +53,9 @@ deps::
 
 app::
 	$(MAKE) -C src
+
+format::
+	$(verbose) clang-format -i src/*.c include/*.h
 
 ifeq ($(PLATFORM),windows)
 
