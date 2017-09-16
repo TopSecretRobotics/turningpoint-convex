@@ -1,0 +1,25 @@
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+notifications:
+  email: false
+
+cache:
+  directories:
+    - starstruck-convex
+
+before_install:
+  -
+    if [ -e "starstruck-convex/image.tar" ]; then
+      docker load -i "starstruck-convex/image.tar";
+    else
+      docker build -t "starstruck-convex" -f Dockerfile .;
+      mkdir -p "starstruck-convex"; docker save -o "starstruck-convex/image.tar" "starstruck-convex";
+    fi
+
+script:
+  - docker run -v `pwd`:/build "starstruck-convex" sh -c 'make'
