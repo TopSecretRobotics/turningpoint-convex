@@ -26,10 +26,25 @@ endif
 export PLATFORM
 endif
 
+ifeq ($(MACHINE),)
+MACHINE = unknown
+ifeq ($(PLATFORM),linux)
+UNAME_M := $(shell uname -m)
+ifeq ($(UNAME_M),armv7l)
+MACHINE = armv7l
+endif
+endif
+export MACHINE
+endif
+
 ifeq ($(PLATFORM),darwin)
 CORTEXFLASH ?= $(CURDIR)/tools/cortexflash.darwin
 else ifeq ($(PLATFORM),linux)
+ifeq ($(MACHINE),armv7l)
+CORTEXFLASH ?= $(CURDIR)/tools/cortexflash.linux.armv7l
+else
 CORTEXFLASH ?= $(CURDIR)/tools/cortexflash.linux
+endif
 else ifeq ($(PLATFORM),windows)
 CORTEXFLASH ?= $(CURDIR)/tools/cortexflash.exe
 endif
