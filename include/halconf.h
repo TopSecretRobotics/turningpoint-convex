@@ -322,6 +322,13 @@
 #define SERIAL_BUFFERS_SIZE 64
 #endif
 
+/**
+ * @brief   Disables secondary LCD.
+ */
+#if !defined(USER_UART2_ENABLE) || defined(__DOXYGEN__)
+#define USER_UART2_ENABLE TRUE
+#endif
+
 /*===========================================================================*/
 /* SPI driver related settings.                                              */
 /*===========================================================================*/

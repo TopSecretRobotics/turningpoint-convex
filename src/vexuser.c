@@ -51,13 +51,17 @@
 #include "vex.h" // vex library header
 
 #include "smartmotor.h"
+#include "vexgyro.h"
+
+// #include "yahdlc.h"
+#include "rpi3.h"
 
 // Digital I/O configuration
 static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalOutput, kVexConfigOutput, 0},
                                               {kVexDigital_2, kVexSensorDigitalOutput, kVexConfigOutput, 0},
                                               {kVexDigital_3, kVexSensorDigitalInput, kVexConfigInput, 0},
                                               {kVexDigital_4, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
-                                              {kVexDigital_5, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
+                                              {kVexDigital_5, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_2},
                                               {kVexDigital_6, kVexSensorDigitalInput, kVexConfigInput, 0},
                                               {kVexDigital_7, kVexSensorDigitalInput, kVexConfigInput, 0},
                                               {kVexDigital_8, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_1},
@@ -92,6 +96,7 @@ vexUserSetup()
 {
     vexDigitalConfigure(dConfig, DIG_CONFIG_SIZE(dConfig));
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
+    rpi3Setup(&SD3);
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -111,6 +116,8 @@ vexUserInit()
     // SmartMotorSetPowerExpanderStatusPort(kVexAnalog_3);
     // SmartMotorsAddPowerExtender(kVexMotor_2, kVexMotor_7, kVexMotor_8, kVexMotor_9);
     // SmartMotorRun();
+    rpi3Init();
+    rpi3Start();
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -134,6 +141,16 @@ vexAutonomous(void *arg)
     return (msg_t)0;
 }
 
+// static char sendData[128];
+// static char sendFrame[136];
+// static unsigned int sendLength = 0;
+// static char recvData[128];
+// static char recvFrame[136];
+// static unsigned int recvLength = 0;
+// static yahdlc_control_t sendControl;
+// static yahdlc_control_t recvControl;
+// static int seq_no = 0;
+
 /*-----------------------------------------------------------------------------*/
 /** @brief      Driver control                                                 */
 /*-----------------------------------------------------------------------------*/
@@ -150,13 +167,54 @@ vexOperator(void *arg)
     // Must call this
     vexTaskRegister("operator");
 
+    vexGyroInit(kVexAnalog_6);
+
+    vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1);
+    vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2);
+
     // Give the system half a second to restart the LCD
     vexSleep(500);
+
+    vexLcdButton buttons;
+
+    // int count = 0;
+    // int ret;
+    // char *message = "hello\n";
 
     // Run until asked to terminate
     while (!chThdShouldTerminate()) {
         // flash led/digi out
         // vexDigitalPinSet( kVexDigital_1, (blink++ >> 3) & 1);
+
+        buttons = vexLcdButtonGet(VEX_LCD_DISPLAY_1);
+
+        if (buttons == kLcdButtonRight) {
+            vexGyroReset();
+            do {
+                buttons = vexLcdButtonGet(VEX_LCD_DISPLAY_1);
+                vexSleep(25);
+            } while (buttons != kLcdButtonNone);
+        }
+
+        // status on LCD of rpi3 connection
+        vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%s", rpi3IsConnected() ? "CONNECTED" : "DISCONNECTED");
+
+        // status on LCD of encoder and sonar
+        // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%4.2fV G %6.2f", vexSpiGetMainBattery() / 1000.0, vexGyroGet() / 10.0);
+
+        // if (++count == 100) {
+        //     sendControl.frame = YAHDLC_FRAME_DATA;
+        //     sendControl.seq_no = seq_no++;
+        //     if (seq_no > 7) {
+        //         seq_no = 0;
+        //     }
+        //     ret = yahdlc_frame_data(&sendControl, NULL, 0, sendFrame, &sendLength);
+        //     // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "ret = %d, sl = %d", ret, sendLength);
+        //     // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2, "seq_no = %d", (int)sendControl.seq_no);
+        //     sdWrite(&SD3, (unsigned char *)sendFrame, sendLength);
+        //     // sdWrite(&SD3, (unsigned char *)message, 6);
+        //     count = 0;
+        // }
 
         // Don't hog cpu
         vexSleep(25);

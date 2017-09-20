@@ -11,5 +11,8 @@ CONVEX_OPT = yes
 # User C code files
 VEXUSERSRC = vexuser.c $(filter-out main.c vexuser.c, $(wildcard *.c))
 
+# User CPP code files
+VEXUSERCPPSRC = $(wildcard *.cpp)
+
 # Uncomment and add/modify user include files
 VEXUSERINC = ../include
