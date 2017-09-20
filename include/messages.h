@@ -126,7 +126,8 @@ extern void message_read_frame(message_read_t *message, uint8_t req_id, uint8_t 
 extern void message_write_frame(message_write_t *message, uint8_t req_id, uint8_t type, uint8_t topic, uint8_t len, uint8_t *value);
 extern void message_subscribe_frame(message_subscribe_t *message, uint8_t req_id, uint8_t type, uint8_t topic);
 extern void message_unsubscribe_frame(message_unsubscribe_t *message, uint8_t req_id);
-extern void message_publish_frame(message_publish_t *message, uint8_t req_id, uint8_t type, uint8_t topic, uint8_t len, uint8_t *value);
+extern void message_publish_frame(message_publish_t *message, uint8_t req_id, uint8_t type, uint8_t topic, uint8_t len,
+                                  uint8_t *value);
 extern size_t message_getsizeof(const message_any_t *m);
 extern int message_serialize(const message_any_t *m, uint8_t *buf, size_t len, size_t *outlen);
 extern int message_deserialize(message_any_t *m, const uint8_t *buf, size_t len);

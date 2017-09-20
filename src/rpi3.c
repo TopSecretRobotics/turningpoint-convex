@@ -16,12 +16,21 @@
 // types for rpi3
 typedef enum rpi3State { rpi3StateSFPdisconnected = 0, rpi3StateSFPconnected } rpi3State;
 
+typedef struct subscription_s {
+    uint16_t req_id;
+    uint8_t type;
+    uint8_t topic;
+} subscription_t;
+
 typedef struct rpi3_s {
     SerialDriver *sd;
     message_any_t rmsg;
     message_any_t wmsg;
     uint8_t rbuf[SFP_CONFIG_MAX_PACKET_SIZE];
     uint8_t wbuf[SFP_CONFIG_MAX_PACKET_SIZE];
+    uint32_t lastPublish;
+    uint8_t subcount;
+    subscription_t subs[5];
     uint32_t lastHeartbeat;
     rpi3State state;
     SFPcontext sfp;
@@ -60,6 +69,7 @@ void
 rpi3Setup(SerialDriver *sd)
 {
     rpi3.sd = sd;
+    rpi3.subcount = 0;
     return;
 }
 
@@ -190,32 +200,32 @@ static void
 rpi3HandleMessage(rpi3_t *ctx, const message_any_t *request)
 {
     switch (request->message.op) {
-        case MESSAGES_OP_PING:
-            ctx->lastHeartbeat = chTimeNow();
-            (void)message_pong_frame(&ctx->wmsg.pong, request->ping.seq_id);
-            (void)rpi3SendMessage(ctx, &ctx->wmsg);
-            break;
-        case MESSAGES_OP_PONG:
-            break;
-        case MESSAGES_OP_INFO:
-            break;
-        case MESSAGES_OP_DATA:
-            break;
-        case MESSAGES_OP_READ:
-            (void)rpi3HandleRead(ctx, &request->read);
-            break;
-        case MESSAGES_OP_WRITE:
-            (void)rpi3HandleWrite(ctx, &request->write);
-            break;
-        case MESSAGES_OP_SUBSCRIBE:
-            (void)rpi3SendEmptyError(ctx, request->subscribe.req_id);
-            break;
-        case MESSAGES_OP_UNSUBSCRIBE:
-            break;
-        case MESSAGES_OP_PUBLISH:
-            break;
-        default:
-            break;
+    case MESSAGES_OP_PING:
+        ctx->lastHeartbeat = chTimeNow();
+        (void)message_pong_frame(&ctx->wmsg.pong, request->ping.seq_id);
+        (void)rpi3SendMessage(ctx, &ctx->wmsg);
+        break;
+    case MESSAGES_OP_PONG:
+        break;
+    case MESSAGES_OP_INFO:
+        break;
+    case MESSAGES_OP_DATA:
+        break;
+    case MESSAGES_OP_READ:
+        (void)rpi3HandleRead(ctx, &request->read);
+        break;
+    case MESSAGES_OP_WRITE:
+        (void)rpi3HandleWrite(ctx, &request->write);
+        break;
+    case MESSAGES_OP_SUBSCRIBE:
+        (void)rpi3SendEmptyError(ctx, request->subscribe.req_id);
+        break;
+    case MESSAGES_OP_UNSUBSCRIBE:
+        break;
+    case MESSAGES_OP_PUBLISH:
+        break;
+    default:
+        break;
     }
     return;
 }
@@ -225,15 +235,15 @@ rpi3HandleRead(rpi3_t *ctx, const message_read_t *read)
 {
     // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2, "%d", read->req_id);
     switch (read->type) {
-        case MESSAGES_TYPE_CLOCK:
-            (void)rpi3HandleReadClock(ctx, read);
-            break;
-        case MESSAGES_TYPE_MOTOR:
-            (void)rpi3HandleReadMotor(ctx, read);
-            break;
-        default:
-            (void)rpi3SendEmptyError(ctx, read->req_id);
-            break;
+    case MESSAGES_TYPE_CLOCK:
+        (void)rpi3HandleReadClock(ctx, read);
+        break;
+    case MESSAGES_TYPE_MOTOR:
+        (void)rpi3HandleReadMotor(ctx, read);
+        break;
+    default:
+        (void)rpi3SendEmptyError(ctx, read->req_id);
+        break;
     }
     return;
 }
@@ -243,15 +253,15 @@ rpi3HandleReadClock(rpi3_t *ctx, const message_read_t *read)
 {
     uint32_t value;
     switch (read->topic) {
-        case 0:
-            value = chTimeNow();
-            value = (uint32_t)(htonl(value));
-            (void)message_data_frame(&ctx->wmsg.data, read->req_id, 0, 4, (void *)&value);
-            (void)rpi3SendMessage(ctx, &ctx->wmsg);
-            break;
-        default:
-            (void)rpi3SendEmptyError(ctx, read->req_id);
-            break;
+    case 0:
+        value = chTimeNow();
+        value = (uint32_t)(htonl(value));
+        (void)message_data_frame(&ctx->wmsg.data, read->req_id, 0, 4, (void *)&value);
+        (void)rpi3SendMessage(ctx, &ctx->wmsg);
+        break;
+    default:
+        (void)rpi3SendEmptyError(ctx, read->req_id);
+        break;
     }
     return;
 }
@@ -273,12 +283,12 @@ static void
 rpi3HandleWrite(rpi3_t *ctx, const message_write_t *write)
 {
     switch (write->type) {
-        case MESSAGES_TYPE_MOTOR:
-            (void)rpi3HandleWriteMotor(ctx, write);
-            break;
-        default:
-            // (void)rpi3SendEmptyError(ctx, write->req_id);
-            break;
+    case MESSAGES_TYPE_MOTOR:
+        (void)rpi3HandleWriteMotor(ctx, write);
+        break;
+    default:
+        // (void)rpi3SendEmptyError(ctx, write->req_id);
+        break;
     }
     return;
 }
