@@ -16,6 +16,14 @@ And sent to the Cortex by running:
 make flash
 ```
 
+#### Code Formatting
+
+If you have [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html) installed, you can run the following for format all of the C code for consistency:
+
+```bash
+make format
+```
+
 #### Shell
 
 On macOS and Linux, you can connect to the device's terminal by running:
@@ -34,7 +42,7 @@ Usage with docker:
 
 ```bash
 docker build -t "inthezone-convex" -f Dockerfile .
-docker run --rm -v `pwd`:/build "inthezone-convex" make
+docker run --rm -v `pwd`:/build/project "inthezone-convex" make
 ```
 
 Usage with docker-compose:
