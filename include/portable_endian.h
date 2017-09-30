@@ -12,31 +12,35 @@
 #include "hal.h" // hardware abstraction layer header
 #include "vex.h" // vex library header
 
-// #if BYTE_ORDER == BIG_ENDIAN
+#ifndef BYTE_ORDER
+#define BYTE_ORDER LITTLE_ENDIAN
+#endif
 
-// #define HTONS(n) (n)
-// #define NTOHS(n) (n)
-// #define HTONL(n) (n)
-// #define NTOHL(n) (n)
+#if BYTE_ORDER == LITTLE_ENDIAN
 
-// #else
+#define HTONS(n) __builtin_bswap16(n)
+#define NTOHS(n) __builtin_bswap16(n)
+#define HTONL(n) __builtin_bswap32(n)
+#define NTOHL(n) __builtin_bswap32(n)
+#define HTONLL(n) __builtin_bswap64(n)
+#define NTOHLL(n) __builtin_bswap64(n)
 
-#define HTONS(n) (((((unsigned short)(n)&0xFF)) << 8) | (((unsigned short)(n)&0xFF00) >> 8))
-#define NTOHS(n) (((((unsigned short)(n)&0xFF)) << 8) | (((unsigned short)(n)&0xFF00) >> 8))
+#else
 
-#define HTONL(n)                                                                                                                   \
-    (((((unsigned long)(n)&0xFF)) << 24) | ((((unsigned long)(n)&0xFF00)) << 8) | ((((unsigned long)(n)&0xFF0000)) >> 8) |         \
-     ((((unsigned long)(n)&0xFF000000)) >> 24))
+#define HTONS(n) (n)
+#define NTOHS(n) (n)
+#define HTONL(n) (n)
+#define NTOHL(n) (n)
+#define HTONLL(n) (n)
+#define NTOHLL(n) (n)
 
-#define NTOHL(n)                                                                                                                   \
-    (((((unsigned long)(n)&0xFF)) << 24) | ((((unsigned long)(n)&0xFF00)) << 8) | ((((unsigned long)(n)&0xFF0000)) >> 8) |         \
-     ((((unsigned long)(n)&0xFF000000)) >> 24))
-// #endif
+#endif
 
 #define htons(n) HTONS(n)
 #define ntohs(n) NTOHS(n)
-
 #define htonl(n) HTONL(n)
 #define ntohl(n) NTOHL(n)
+#define htonll(n) HTONLL(n)
+#define ntohll(n) NTOHLL(n)
 
 #endif

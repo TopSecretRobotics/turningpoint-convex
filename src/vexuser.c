@@ -53,8 +53,7 @@
 #include "smartmotor.h"
 #include "vexgyro.h"
 
-// #include "yahdlc.h"
-#include "rpi3.h"
+#include "server.h"
 
 // Digital I/O configuration
 static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalOutput, kVexConfigOutput, 0},
@@ -96,7 +95,7 @@ vexUserSetup()
 {
     vexDigitalConfigure(dConfig, DIG_CONFIG_SIZE(dConfig));
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
-    rpi3Setup(&SD3);
+    serverSetup(&SD3);
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -116,8 +115,8 @@ vexUserInit()
     // SmartMotorSetPowerExpanderStatusPort(kVexAnalog_3);
     // SmartMotorsAddPowerExtender(kVexMotor_2, kVexMotor_7, kVexMotor_8, kVexMotor_9);
     // SmartMotorRun();
-    rpi3Init();
-    rpi3Start();
+    serverInit();
+    serverStart();
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -176,6 +175,7 @@ vexOperator(void *arg)
     vexSleep(500);
 
     vexLcdButton buttons;
+    serverIpv4_t ipv4;
 
     // int count = 0;
     // int ret;
@@ -196,8 +196,14 @@ vexOperator(void *arg)
             } while (buttons != kLcdButtonNone);
         }
 
-        // status on LCD of rpi3 connection
-        vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%s", rpi3IsConnected() ? "CONNECTED" : "DISCONNECTED");
+        // status on LCD of server connection
+        vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%s", serverIsConnected() ? "CONNECTED" : "DISCONNECTED");
+        ipv4 = serverGetIpv4();
+        if (ipv4.v[0] == 0) {
+            vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2);
+        } else {
+            vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2, "%u.%u.%u.%u", ipv4.v[0], ipv4.v[1], ipv4.v[2], ipv4.v[3]);
+        }
 
         // status on LCD of encoder and sonar
         // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%4.2fV G %6.2f", vexSpiGetMainBattery() / 1000.0, vexGyroGet() / 10.0);

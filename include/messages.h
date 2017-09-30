@@ -11,24 +11,42 @@
 #include <stdint.h>
 #include <string.h>
 
-#define MESSAGES_OP_PING 1
-#define MESSAGES_OP_PONG 2
-#define MESSAGES_OP_INFO 3
-#define MESSAGES_OP_DATA 4
-#define MESSAGES_OP_READ 5
-#define MESSAGES_OP_WRITE 6
-#define MESSAGES_OP_SUBSCRIBE 7
-#define MESSAGES_OP_UNSUBSCRIBE 8
-#define MESSAGES_OP_PUBLISH 9
+#define MESSAGES_OP_PING 0x01
+#define MESSAGES_OP_PONG 0x02
+#define MESSAGES_OP_INFO 0x03
+#define MESSAGES_OP_DATA 0x04
+#define MESSAGES_OP_READ 0x05
+#define MESSAGES_OP_WRITE 0x06
+#define MESSAGES_OP_SUBSCRIBE 0x07
+#define MESSAGES_OP_UNSUBSCRIBE 0x08
 
-#define MESSAGES_DATA_FLAG_MORE 0x01
-#define MESSAGES_DATA_FLAG_ERROR 0x02
+#define MESSAGES_DATA_FLAG_END 0x01
+#define MESSAGES_DATA_FLAG_PUB 0x02
+#define MESSAGES_DATA_FLAG_ERROR 0x04
 
-#define MESSAGES_TYPE_CLOCK 0
-#define MESSAGES_TYPE_MOTOR 1
+#define MESSAGES_ERROR_BAD_REQ_ID 0x01
+#define MESSAGES_ERROR_BAD_TOPIC 0x02
+#define MESSAGES_ERROR_BAD_SUBTOPIC 0x03
+#define MESSAGES_ERROR_SUB_MAX 0x04
 
-// #define MESSAGES_TOPIC_CLOCK_NOW 0
-// #define MESSAGES_TOPIC_MOTOR0 0
+#define MESSAGES_TOPIC_PUBSUB 0x00
+#define MESSAGES_TOPIC_PUBSUB_SUBTOPIC_COUNT 0xfb
+#define MESSAGES_TOPIC_PUBSUB_SUBTOPIC_FREE 0xfc
+#define MESSAGES_TOPIC_PUBSUB_SUBTOPIC_MAX 0xfd
+#define MESSAGES_TOPIC_PUBSUB_SUBTOPIC_LIST 0xfe
+#define MESSAGES_TOPIC_PUBSUB_SUBTOPIC_ALL 0xff
+#define MESSAGES_TOPIC_CLOCK 0x01
+#define MESSAGES_TOPIC_CLOCK_SUBTOPIC_NOW 0x00
+#define MESSAGES_TOPIC_MOTOR 0x02
+#define MESSAGES_TOPIC_MOTOR_SUBTOPIC_ALL 0xff
+#define MESSAGES_TOPIC_SMARTMOTOR 0x03
+#define MESSAGES_TOPIC_SMARTMOTOR_SUBTOPIC_ALL 0xff
+#define MESSAGES_TOPIC_NETWORK 0x04
+#define MESSAGES_TOPIC_NETWORK_SUBTOPIC_IPV4 0x00
+#define MESSAGES_TOPIC_ROBOT 0x05
+#define MESSAGES_TOPIC_ROBOT_SUBTOPIC_SPI 0x00
+#define MESSAGES_TOPIC_ALL 0xff
+#define MESSAGES_TOPIC_ALL_SUBTOPIC_ALL 0xff
 
 typedef struct message_s {
     uint8_t op;
@@ -46,6 +64,8 @@ typedef struct message_pong_s {
 
 typedef struct message_info_s {
     uint8_t op;
+    uint8_t topic;
+    uint8_t subtopic;
     uint8_t len;
     uint8_t *value;
 } message_info_t;
@@ -58,7 +78,10 @@ typedef struct message_req_s {
 typedef struct message_data_s {
     uint8_t op;
     uint16_t req_id;
+    uint8_t topic;
+    uint8_t subtopic;
     uint8_t flag;
+    uint32_t timestamp;
     uint8_t len;
     uint8_t *value;
 } message_data_t;
@@ -66,15 +89,15 @@ typedef struct message_data_s {
 typedef struct message_read_s {
     uint8_t op;
     uint16_t req_id;
-    uint8_t type;
     uint8_t topic;
+    uint8_t subtopic;
 } message_read_t;
 
 typedef struct message_write_s {
     uint8_t op;
     uint16_t req_id;
-    uint8_t type;
     uint8_t topic;
+    uint8_t subtopic;
     uint8_t len;
     uint8_t *value;
 } message_write_t;
@@ -82,23 +105,14 @@ typedef struct message_write_s {
 typedef struct message_subscribe_s {
     uint8_t op;
     uint16_t req_id;
-    uint8_t type;
     uint8_t topic;
+    uint8_t subtopic;
 } message_subscribe_t;
 
 typedef struct message_unsubscribe_s {
     uint8_t op;
     uint16_t req_id;
 } message_unsubscribe_t;
-
-typedef struct message_publish_s {
-    uint8_t op;
-    uint16_t req_id;
-    uint8_t type;
-    uint8_t topic;
-    uint8_t len;
-    uint8_t *value;
-} message_publish_t;
 
 typedef union message_any_t {
     message_t message;
@@ -111,7 +125,6 @@ typedef union message_any_t {
     message_write_t write;
     message_subscribe_t subscribe;
     message_unsubscribe_t unsubscribe;
-    message_publish_t publish;
 } message_any_t;
 
 #ifdef __cplusplus
@@ -120,14 +133,14 @@ extern "C" {
 
 extern void message_ping_frame(message_ping_t *message, uint8_t seq_id);
 extern void message_pong_frame(message_pong_t *message, uint8_t seq_id);
-extern void message_info_frame(message_info_t *message, uint8_t len, uint8_t *value);
-extern void message_data_frame(message_data_t *message, uint8_t req_id, uint8_t flag, uint8_t len, uint8_t *value);
-extern void message_read_frame(message_read_t *message, uint8_t req_id, uint8_t type, uint8_t topic);
-extern void message_write_frame(message_write_t *message, uint8_t req_id, uint8_t type, uint8_t topic, uint8_t len, uint8_t *value);
-extern void message_subscribe_frame(message_subscribe_t *message, uint8_t req_id, uint8_t type, uint8_t topic);
+extern void message_info_frame(message_info_t *message, uint8_t topic, uint8_t subtopic, uint8_t len, uint8_t *value);
+extern void message_data_frame(message_data_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic, uint8_t flag,
+                               uint32_t timestamp, uint8_t len, uint8_t *value);
+extern void message_read_frame(message_read_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic);
+extern void message_write_frame(message_write_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic, uint8_t len,
+                                uint8_t *value);
+extern void message_subscribe_frame(message_subscribe_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic);
 extern void message_unsubscribe_frame(message_unsubscribe_t *message, uint8_t req_id);
-extern void message_publish_frame(message_publish_t *message, uint8_t req_id, uint8_t type, uint8_t topic, uint8_t len,
-                                  uint8_t *value);
 extern size_t message_getsizeof(const message_any_t *m);
 extern int message_serialize(const message_any_t *m, uint8_t *buf, size_t len, size_t *outlen);
 extern int message_deserialize(message_any_t *m, const uint8_t *buf, size_t len);

@@ -86,6 +86,13 @@ cmd_sm(vexStream *chp, int argc, char *argv[])
     }
 }
 
+static void
+cmd_bat(vexStream *chp, int argc, char *argv[])
+{
+    vex_printf("Main Battery: %d\r\n", vexSpiGetMainBattery());
+    vex_printf("Main Battery: %d\r\n", vexSpiGetBackupBattery());
+}
+
 #define SHELL_WA_SIZE THD_WA_SIZE(512)
 
 // Shell command
@@ -99,6 +106,7 @@ static const ShellCommand commands[] = {{"adc", vexAdcDebug},
                                         {"test", vexTestDebug},
                                         {"sm", cmd_sm},
                                         {"apollo", cmd_apollo},
+                                        {"bat", cmd_bat},
                                         {NULL, NULL}};
 
 // configuration for the shell
