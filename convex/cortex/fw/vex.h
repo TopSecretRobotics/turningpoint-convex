@@ -164,7 +164,7 @@ void        vexTaskPersistentSet( Thread *tp, bool_t p );
 void        vexTaskEmergencyStop( void );
 void        vexSleep( int32_t msec );
 
-//#define     VEX_WATCHDOG_ENABLE     1
+#define     VEX_WATCHDOG_ENABLE     1
 void        vexWatchdogInit(void);
 void        vexWatchdogReload(void);
 int16_t     vexWatchdogResetFlagGet(void);

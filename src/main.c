@@ -89,6 +89,9 @@ cmd_sm(vexStream *chp, int argc, char *argv[])
 static void
 cmd_bat(vexStream *chp, int argc, char *argv[])
 {
+    (void)chp;
+    (void)argc;
+    (void)argv;
     vex_printf("Main Battery: %d\r\n", vexSpiGetMainBattery());
     vex_printf("Main Battery: %d\r\n", vexSpiGetBackupBattery());
 }

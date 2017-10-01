@@ -14,8 +14,11 @@
 
 #include "messages.h"
 #include "serial_framing_protocol.h"
+#include "vexflash.h"
 
 #define RPC_SUB_MAX 10
+#define RPC_PUB_TIMEOUT 25
+#define RPC_INFO_TIMEOUT 1000
 
 typedef int (*rpcWritePacket_t)(const uint8_t *octets, size_t len, size_t *outlen, void *userdata);
 
@@ -34,6 +37,9 @@ typedef struct rpcSubscription_s {
 typedef struct rpc_s {
     uint8_t seq_id;
     uint8_t ipv4[4];
+    int8_t motor[10];
+    uint8_t cassette;
+    user_param *fp;
     uint8_t tmp[SFP_CONFIG_MAX_PACKET_SIZE];
     rpcBuffer_t in;
     rpcBuffer_t out;

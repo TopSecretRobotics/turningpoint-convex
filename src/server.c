@@ -221,6 +221,14 @@ serverCheckConnection(server_t *srv)
     if (srv->state == serverStateDisconnected) {
         if (sfpIsConnected(&srv->sfp)) {
             srv->rpc.timestamp = srv->rpc.heartbeat = srv->rpc.published = srv->rpc.sendstats = chTimeNow();
+            for (int i = 0; i < RPC_SUB_MAX; i++) {
+                srv->rpc.subs[i].active = false;
+                srv->rpc.subs[i].req_id = 0;
+                srv->rpc.subs[i].topic = 0;
+                srv->rpc.subs[i].subtopic = 0;
+            }
+            srv->rpc.cassette = 0xff;
+            srv->rpc.fp = NULL;
             srv->state = serverStateConnected;
         }
     } else if (srv->state == serverStateConnected) {
