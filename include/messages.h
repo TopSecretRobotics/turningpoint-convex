@@ -141,13 +141,13 @@ extern "C" {
 extern void message_ping_frame(message_ping_t *message, uint8_t seq_id);
 extern void message_pong_frame(message_pong_t *message, uint8_t seq_id);
 extern void message_info_frame(message_info_t *message, uint8_t topic, uint8_t subtopic, uint8_t len, uint8_t *value);
-extern void message_data_frame(message_data_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic, uint8_t flag,
+extern void message_data_frame(message_data_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic, uint8_t flag,
                                uint32_t timestamp, uint8_t len, uint8_t *value);
-extern void message_read_frame(message_read_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic);
-extern void message_write_frame(message_write_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic, uint8_t len,
+extern void message_read_frame(message_read_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic);
+extern void message_write_frame(message_write_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic, uint8_t len,
                                 uint8_t *value);
-extern void message_subscribe_frame(message_subscribe_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic);
-extern void message_unsubscribe_frame(message_unsubscribe_t *message, uint8_t req_id);
+extern void message_subscribe_frame(message_subscribe_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic);
+extern void message_unsubscribe_frame(message_unsubscribe_t *message, uint16_t req_id);
 extern size_t message_getsizeof(const message_any_t *m);
 extern int message_serialize(const message_any_t *m, uint8_t *buf, size_t len, size_t *outlen);
 extern int message_deserialize(message_any_t *m, const uint8_t *buf, size_t len);

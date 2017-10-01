@@ -1,5 +1,5 @@
-// -*- mode: c; tab-width: 4; indent-tabs-mode: nil; st-rulers: [132] -*-
-// vim: ts=4 sw=4 ft=c et
+// -*- mode: c++; tab-width: 4; indent-tabs-mode: nil; st-rulers: [132] -*-
+// vim: ts=4 sw=4 ft=c++ et
 
 #include "messages.h"
 #include "portable_endian.h"
@@ -29,7 +29,7 @@ message_info_frame(message_info_t *message, uint8_t topic, uint8_t subtopic, uin
 }
 
 void
-message_data_frame(message_data_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic, uint8_t flag, uint32_t timestamp,
+message_data_frame(message_data_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic, uint8_t flag, uint32_t timestamp,
                    uint8_t len, uint8_t *value)
 {
     message->op = MESSAGES_OP_DATA;
@@ -43,7 +43,7 @@ message_data_frame(message_data_t *message, uint8_t req_id, uint8_t topic, uint8
 }
 
 void
-message_read_frame(message_read_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic)
+message_read_frame(message_read_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic)
 {
     message->op = MESSAGES_OP_READ;
     message->req_id = req_id;
@@ -52,7 +52,7 @@ message_read_frame(message_read_t *message, uint8_t req_id, uint8_t topic, uint8
 }
 
 void
-message_write_frame(message_write_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic, uint8_t len, uint8_t *value)
+message_write_frame(message_write_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic, uint8_t len, uint8_t *value)
 {
     message->op = MESSAGES_OP_WRITE;
     message->req_id = req_id;
@@ -63,7 +63,7 @@ message_write_frame(message_write_t *message, uint8_t req_id, uint8_t topic, uin
 }
 
 void
-message_subscribe_frame(message_subscribe_t *message, uint8_t req_id, uint8_t topic, uint8_t subtopic)
+message_subscribe_frame(message_subscribe_t *message, uint16_t req_id, uint8_t topic, uint8_t subtopic)
 {
     message->op = MESSAGES_OP_SUBSCRIBE;
     message->req_id = req_id;
@@ -72,7 +72,7 @@ message_subscribe_frame(message_subscribe_t *message, uint8_t req_id, uint8_t to
 }
 
 void
-message_unsubscribe_frame(message_unsubscribe_t *message, uint8_t req_id)
+message_unsubscribe_frame(message_unsubscribe_t *message, uint16_t req_id)
 {
     message->op = MESSAGES_OP_UNSUBSCRIBE;
     message->req_id = req_id;

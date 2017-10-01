@@ -99,18 +99,10 @@ cmd_bat(vexStream *chp, int argc, char *argv[])
 #define SHELL_WA_SIZE THD_WA_SIZE(512)
 
 // Shell command
-static const ShellCommand commands[] = {{"adc", vexAdcDebug},
-                                        {"spi", vexSpiDebug},
-                                        {"motor", vexMotorDebug},
-                                        {"lcd", vexLcdDebug},
-                                        {"enc", vexEncoderDebug},
-                                        {"son", vexSonarDebug},
-                                        {"ime", vexIMEDebug},
-                                        {"test", vexTestDebug},
-                                        {"sm", cmd_sm},
-                                        {"apollo", cmd_apollo},
-                                        {"bat", cmd_bat},
-                                        {NULL, NULL}};
+static const ShellCommand commands[] = {{"adc", vexAdcDebug},   {"spi", vexSpiDebug},     {"motor", vexMotorDebug},
+                                        {"lcd", vexLcdDebug},   {"enc", vexEncoderDebug}, {"son", vexSonarDebug},
+                                        {"ime", vexIMEDebug},   {"test", vexTestDebug},   {"sm", cmd_sm},
+                                        {"apollo", cmd_apollo}, {"bat", cmd_bat},         {NULL, NULL}};
 
 // configuration for the shell
 static const ShellConfig shell_cfg1 = {(vexStream *)SD_CONSOLE, commands};
