@@ -53,6 +53,7 @@
 #include "smartmotor.h"
 #include "vexgyro.h"
 
+#include "drive.h"
 #include "server.h"
 
 // Digital I/O configuration
@@ -105,7 +106,7 @@ vexUserSetup()
 {
     vexDigitalConfigure(dConfig, DIG_CONFIG_SIZE(dConfig));
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
-    serverSetup(&SD3);
+    // serverSetup(&SD3);
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -119,14 +120,15 @@ vexUserSetup()
 void
 vexUserInit()
 {
-    // SmartMotorsInit();
-    // SmartMotorCurrentMonitorEnable();
+    SmartMotorsInit();
+    SmartMotorCurrentMonitorEnable();
     // SmartMotorPtcMonitorEnable();
     // SmartMotorSetPowerExpanderStatusPort(kVexAnalog_3);
     // SmartMotorsAddPowerExtender(kVexMotor_2, kVexMotor_7, kVexMotor_8, kVexMotor_9);
-    // SmartMotorRun();
-    serverInit();
-    serverStart();
+    driveInit();
+    SmartMotorRun();
+    // serverInit();
+    // serverStart();
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -176,7 +178,9 @@ vexOperator(void *arg)
     // Must call this
     vexTaskRegister("operator");
 
-    vexGyroInit(kVexAnalog_6);
+    driveStart();
+
+    // vexGyroInit(kVexAnalog_6);
 
     vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1);
     vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2);
@@ -184,8 +188,8 @@ vexOperator(void *arg)
     // Give the system half a second to restart the LCD
     vexSleep(500);
 
-    vexLcdButton buttons;
-    serverIpv4_t ipv4;
+    // vexLcdButton buttons;
+    // serverIpv4_t ipv4;
 
     // int count = 0;
     // int ret;
@@ -196,24 +200,24 @@ vexOperator(void *arg)
         // flash led/digi out
         // vexDigitalPinSet( kVexDigital_1, (blink++ >> 3) & 1);
 
-        buttons = vexLcdButtonGet(VEX_LCD_DISPLAY_1);
+        // buttons = vexLcdButtonGet(VEX_LCD_DISPLAY_1);
 
-        if (buttons == kLcdButtonRight) {
-            vexGyroReset();
-            do {
-                buttons = vexLcdButtonGet(VEX_LCD_DISPLAY_1);
-                vexSleep(25);
-            } while (buttons != kLcdButtonNone);
-        }
+        // if (buttons == kLcdButtonRight) {
+        //     vexGyroReset();
+        //     do {
+        //         buttons = vexLcdButtonGet(VEX_LCD_DISPLAY_1);
+        //         vexSleep(25);
+        //     } while (buttons != kLcdButtonNone);
+        // }
 
-        // status on LCD of server connection
-        vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%s", serverIsConnected() ? "CONNECTED" : "DISCONNECTED");
-        ipv4 = serverGetIpv4();
-        if (ipv4.v[0] == 0) {
-            vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2);
-        } else {
-            vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2, "%u.%u.%u.%u", ipv4.v[0], ipv4.v[1], ipv4.v[2], ipv4.v[3]);
-        }
+        // // status on LCD of server connection
+        // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%s", serverIsConnected() ? "CONNECTED" : "DISCONNECTED");
+        // ipv4 = serverGetIpv4();
+        // if (ipv4.v[0] == 0) {
+        //     vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2);
+        // } else {
+        //     vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2, "%u.%u.%u.%u", ipv4.v[0], ipv4.v[1], ipv4.v[2], ipv4.v[3]);
+        // }
 
         // status on LCD of encoder and sonar
         // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, "%4.2fV G %6.2f", vexSpiGetMainBattery() / 1000.0, vexGyroGet() / 10.0);

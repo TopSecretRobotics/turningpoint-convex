@@ -220,8 +220,9 @@ serverCheckConnection(server_t *srv)
 {
     if (srv->state == serverStateDisconnected) {
         if (sfpIsConnected(&srv->sfp)) {
+            int i;
             srv->rpc.timestamp = srv->rpc.heartbeat = srv->rpc.published = srv->rpc.sendstats = chTimeNow();
-            for (int i = 0; i < RPC_SUB_MAX; i++) {
+            for (i = 0; i < RPC_SUB_MAX; i++) {
                 srv->rpc.subs[i].active = false;
                 srv->rpc.subs[i].req_id = 0;
                 srv->rpc.subs[i].topic = 0;
