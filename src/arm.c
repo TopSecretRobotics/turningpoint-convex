@@ -133,7 +133,7 @@ static msg_t
 armThread(void *arg)
 {
     int16_t armCmd = 0;
-    bool immediate = FALSE;
+    bool immediate = false;
 
     // Unused
     (void)arg;
@@ -146,7 +146,7 @@ armThread(void *arg)
             armCmd = armSpeed(limitSpeed(vexControllerGet(Ch2Xmtr2), 20));
 
             if (armCmd == 0) {
-                immediate = FALSE;
+                immediate = false;
                 if (vexControllerGet(Btn7D) || vexControllerGet(Btn7DXmtr2)) {
                     arm.command = armCommandFloor;
                     arm.lock->enabled = 1;
@@ -163,7 +163,7 @@ armThread(void *arg)
                 armPIDUpdate(&armCmd);
             } else {
                 arm.command = armCommandFree;
-                immediate = TRUE;
+                immediate = true;
                 // disable PID if joystick driving
                 arm.lock->enabled = 0;
                 PidControllerUpdate(arm.lock); // zero out PID
@@ -219,13 +219,13 @@ armMove(int16_t cmd, bool immediate)
 void
 armLock(void)
 {
-    arm.locked = TRUE;
+    arm.locked = true;
 }
 
 void
 armUnlock(void)
 {
-    arm.locked = FALSE;
+    arm.locked = false;
 }
 
 void
@@ -238,7 +238,7 @@ armLockFloor(void)
 }
 
 void
-armLockBump(void)
+armLockCarry(void)
 {
     armLock();
     arm.command = armCommandCarry;
@@ -247,7 +247,7 @@ armLockBump(void)
 }
 
 void
-armLockUp(void)
+armLockCeiling(void)
 {
     armLock();
     arm.command = armCommandCeiling;

@@ -55,6 +55,12 @@
 
 #include "arm.h"
 #include "drive.h"
+#include "intake.h"
+#include "lift.h"
+#include "setter.h"
+
+#include "system.h"
+
 // #include "server.h"
 
 // Digital I/O configuration
@@ -108,11 +114,6 @@ vexUserSetup()
     vexDigitalConfigure(dConfig, DIG_CONFIG_SIZE(dConfig));
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
     // serverSetup(&SD3);
-    driveSetup(kVexMotor_2,  // drive northeast or front-right motor
-               kVexMotor_9,  // drive northwest or front-left motor
-               kVexMotor_10, // drive southeast or back-right motor
-               kVexMotor_1   // drive southwest or back-left motor
-    );
     armSetup(kVexMotor_4,  // arm motor
              kVexAnalog_1, // arm potentiometer
              true,         // reversed potentiometer (values decrease with positive motor speed)
@@ -120,6 +121,24 @@ vexUserSetup()
              3750,         // floor potentiometer value
              2880,         // carry potentiometer value
              350           // ceiling potentiometer value
+    );
+    driveSetup(kVexMotor_2,  // drive northeast or front-right motor
+               kVexMotor_9,  // drive northwest or front-left motor
+               kVexMotor_10, // drive southeast or back-right motor
+               kVexMotor_1   // drive southwest or back-left motor
+    );
+    intakeSetup(kVexMotor_1 // intake motor
+    );
+    liftSetup(kVexMotor_4,  // lift first motor
+              kVexMotor_5,  // lift second motor
+              kVexAnalog_1, // lift potentiometer
+              true,         // reversed potentiometer (values decrease with positive motor speed)
+              (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
+              3750,         // floor potentiometer value
+              2880,         // carry potentiometer value
+              350           // ceiling potentiometer value
+    );
+    setterSetup(kVexMotor_1 // setter motor
     );
 }
 
@@ -139,7 +158,7 @@ vexUserInit()
     // SmartMotorPtcMonitorEnable();
     // SmartMotorSetPowerExpanderStatusPort(kVexAnalog_3);
     // SmartMotorsAddPowerExtender(kVexMotor_2, kVexMotor_7, kVexMotor_8, kVexMotor_9);
-    driveInit();
+    systemInitAll();
     SmartMotorRun();
     // serverInit();
     // serverStart();
@@ -166,16 +185,6 @@ vexAutonomous(void *arg)
     return (msg_t)0;
 }
 
-// static char sendData[128];
-// static char sendFrame[136];
-// static unsigned int sendLength = 0;
-// static char recvData[128];
-// static char recvFrame[136];
-// static unsigned int recvLength = 0;
-// static yahdlc_control_t sendControl;
-// static yahdlc_control_t recvControl;
-// static int seq_no = 0;
-
 /*-----------------------------------------------------------------------------*/
 /** @brief      Driver control                                                 */
 /*-----------------------------------------------------------------------------*/
@@ -192,11 +201,8 @@ vexOperator(void *arg)
     // Must call this
     vexTaskRegister("operator");
 
-    armStart();
-    driveStart();
-
-    armLock();
-    driveLock();
+    systemStartAll();
+    systemLockAll();
 
     // vexGyroInit(kVexAnalog_6);
 
