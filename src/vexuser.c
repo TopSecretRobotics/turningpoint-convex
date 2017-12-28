@@ -53,8 +53,9 @@
 #include "smartmotor.h"
 #include "vexgyro.h"
 
+#include "arm.h"
 #include "drive.h"
-#include "server.h"
+// #include "server.h"
 
 // Digital I/O configuration
 static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalOutput, kVexConfigOutput, 0},
@@ -107,6 +108,19 @@ vexUserSetup()
     vexDigitalConfigure(dConfig, DIG_CONFIG_SIZE(dConfig));
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
     // serverSetup(&SD3);
+    driveSetup(kVexMotor_2,  // drive northeast or front-right motor
+               kVexMotor_9,  // drive northwest or front-left motor
+               kVexMotor_10, // drive southeast or back-right motor
+               kVexMotor_1   // drive southwest or back-left motor
+    );
+    armSetup(kVexMotor_4,  // arm motor
+             kVexAnalog_1, // arm potentiometer
+             true,         // reversed potentiometer (values decrease with positive motor speed)
+             (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
+             3750,         // floor potentiometer value
+             2880,         // carry potentiometer value
+             350           // ceiling potentiometer value
+    );
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -178,7 +192,11 @@ vexOperator(void *arg)
     // Must call this
     vexTaskRegister("operator");
 
+    armStart();
     driveStart();
+
+    armLock();
+    driveLock();
 
     // vexGyroInit(kVexAnalog_6);
 

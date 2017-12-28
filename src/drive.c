@@ -1,3 +1,5 @@
+// -*- mode: c++; tab-width: 4; indent-tabs-mode: nil; st-rulers: [132] -*-
+// vim: ts=4 sw=4 ft=c++ et
 /*-----------------------------------------------------------------------------*/
 /** @file    drive.c                                                           */
 /** @brief   The drive system for the robot                                    */
@@ -75,7 +77,7 @@ driveSetup(tVexMotor northeast, tVexMotor northwest, tVexMotor southeast, tVexMo
     drive.northwest = northwest;
     drive.southeast = southeast;
     drive.southwest = southwest;
-    drive.locked = TRUE;
+    drive.locked = true;
     return;
 }
 
@@ -100,10 +102,10 @@ driveStart(void)
     return;
 }
 
-static inline bool_t
+static inline bool
 maybeImmediate(void)
 {
-    return TRUE;
+    return true;
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -138,7 +140,7 @@ driveThread(void *arg)
 }
 
 void
-driveMove(int16_t x, int16_t y, bool_t immediate)
+driveMove(int16_t x, int16_t y, bool immediate)
 {
     SetMotor(drive.northeast, driveSpeed(y - x), immediate);
     SetMotor(drive.northwest, driveSpeed(y + x), immediate);
@@ -150,11 +152,11 @@ driveMove(int16_t x, int16_t y, bool_t immediate)
 void
 driveLock(void)
 {
-    drive.locked = TRUE;
+    drive.locked = true;
 }
 
 void
 driveUnlock(void)
 {
-    drive.locked = FALSE;
+    drive.locked = false;
 }
