@@ -123,7 +123,7 @@ setterThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (setter.locked) {
-            setterCmd = setterSpeed(limitSpeed(vexControllerGet(Ch2Xmtr2), 20));
+            setterCmd = setterSpeed(limitSpeed(vexControllerGet(Ch2), 20));
             setterMove(setterCmd, immediate);
         }
 

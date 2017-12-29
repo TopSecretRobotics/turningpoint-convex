@@ -143,7 +143,7 @@ liftThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (lift.locked) {
-            liftCmd = liftSpeed(limitSpeed(vexControllerGet(Ch2Xmtr2), 20));
+            liftCmd = liftSpeed(limitSpeed(vexControllerGet(Ch3Xmtr2), 20));
 
             if (liftCmd == 0) {
                 immediate = false;

@@ -64,43 +64,28 @@
 // #include "server.h"
 
 // Digital I/O configuration
-static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalOutput, kVexConfigOutput, 0},
-                                              {kVexDigital_2, kVexSensorDigitalOutput, kVexConfigOutput, 0},
-                                              {kVexDigital_3, kVexSensorDigitalInput, kVexConfigInput, 0},
-                                              {kVexDigital_4, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
-                                              {kVexDigital_5, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_2},
-                                              {kVexDigital_6, kVexSensorDigitalInput, kVexConfigInput, 0},
-                                              {kVexDigital_7, kVexSensorDigitalInput, kVexConfigInput, 0},
-                                              {kVexDigital_8, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_1},
-                                              {kVexDigital_9, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_1},
-                                              {kVexDigital_10, kVexSensorDigitalInput, kVexConfigInput, 0},
-                                              {kVexDigital_11, kVexSensorDigitalInput, kVexConfigInput, 0},
-                                              {kVexDigital_12, kVexSensorDigitalInput, kVexConfigInput, 0}};
+static vexDigiCfg dConfig[kVexDigital_Num] = {
+    {kVexDigital_1, kVexSensorDigitalOutput, kVexConfigOutput, 0}, {kVexDigital_2, kVexSensorDigitalOutput, kVexConfigOutput, 0},
+    {kVexDigital_3, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_4, kVexSensorDigitalInput, kVexConfigInput, 0},
+    {kVexDigital_5, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_6, kVexSensorDigitalInput, kVexConfigInput, 0},
+    {kVexDigital_7, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_8, kVexSensorDigitalInput, kVexConfigInput, 0},
+    {kVexDigital_9, kVexSensorDigitalInput, kVexConfigInput, 0},   {kVexDigital_10, kVexSensorDigitalInput, kVexConfigInput, 0},
+    {kVexDigital_11, kVexSensorDigitalInput, kVexConfigInput, 0},  {kVexDigital_12, kVexSensorDigitalInput, kVexConfigInput, 0}};
 
 // Port 1 has no power expander
 // port 9 SW
-// port 2 NE
+// port 2 NE                                          36 inches tall 30 inches deep 49 inches wide
 // Motor configuration
-// static vexMotorCfg mConfig[kVexMotorNum] = {{kVexMotor_1, kVexMotor393S, kVexMotorNormal, kVexSensorIME, 0},
-//                                             {kVexMotor_2, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-//                                             {kVexMotor_3, kVexMotorUndefined, kVexMotorNormal, kVexSensorNone, 0},
-//                                             {kVexMotor_4, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-//                                             {kVexMotor_5, kVexMotor393T, kVexMotorNormal, kVexSensorIME, kImeChannel_3},
-//                                             {kVexMotor_6, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-//                                             {kVexMotor_7, kVexMotor393T, kVexMotorNormal, kVexSensorIME, kImeChannel_2},
-//                                             {kVexMotor_8, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_1},
-//                                             {kVexMotor_9, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-//                                             {kVexMotor_10, kVexMotor393S, kVexMotorNormal, kVexSensorIME, 0}};
 static vexMotorCfg mConfig[kVexMotorNum] = {{kVexMotor_1, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_2, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_3, kVexMotorUndefined, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_4, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_5, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_3, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_4, kVexMotor393S, kVexMotorNormal, kVexSensorIME, kImeChannel_1},
+                                            {kVexMotor_5, kVexMotor393S, kVexMotorNormal, kVexSensorIME, kImeChannel_3},
                                             {kVexMotor_6, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_7, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_7, kVexMotor393S, kVexMotorNormal, kVexSensorIME, kImeChannel_2},
                                             {kVexMotor_8, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_9, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-                                            {kVexMotor_10, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0}};
+                                            {kVexMotor_9, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_10, kVexMotorUndefined, kVexMotorNormal, kVexSensorNone, 0}};
 
 /*-----------------------------------------------------------------------------*/
 /** @brief      User setup                                                     */
@@ -114,32 +99,32 @@ vexUserSetup()
     vexDigitalConfigure(dConfig, DIG_CONFIG_SIZE(dConfig));
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
     // serverSetup(&SD3);
-    armSetup(kVexMotor_4,  // arm motor
+    armSetup(kVexMotor_3,  // arm motor
              kVexAnalog_1, // arm potentiometer
              true,         // reversed potentiometer (values decrease with positive motor speed)
              (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
              3750,         // floor potentiometer value
              2880,         // carry potentiometer value
              350           // ceiling potentiometer value
-    );
-    driveSetup(kVexMotor_2,  // drive northeast or front-right motor
-               kVexMotor_9,  // drive northwest or front-left motor
-               kVexMotor_10, // drive southeast or back-right motor
-               kVexMotor_1   // drive southwest or back-left motor
-    );
-    intakeSetup(kVexMotor_1 // intake motor
-    );
+             );
+    driveSetup(kVexMotor_2, // drive northeast or front-right motor
+               kVexMotor_9, // drive northwest or front-left motor
+               kVexMotor_8, // drive southeast or back-right motor
+               kVexMotor_1  // drive southwest or back-left motor
+               );
+    intakeSetup(kVexMotor_5 // intake motor
+                );
     liftSetup(kVexMotor_4,  // lift first motor
-              kVexMotor_5,  // lift second motor
-              kVexAnalog_1, // lift potentiometer
+              kVexMotor_6,  // lift second motor
+              kVexAnalog_6, // lift potentiometer
               true,         // reversed potentiometer (values decrease with positive motor speed)
               (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
               3750,         // floor potentiometer value
               2880,         // carry potentiometer value
               350           // ceiling potentiometer value
-    );
-    setterSetup(kVexMotor_1 // setter motor
-    );
+              );
+    setterSetup(kVexMotor_7 // setter motor
+                );
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -156,8 +141,8 @@ vexUserInit()
     SmartMotorsInit();
     SmartMotorCurrentMonitorEnable();
     // SmartMotorPtcMonitorEnable();
-    // SmartMotorSetPowerExpanderStatusPort(kVexAnalog_3);
-    // SmartMotorsAddPowerExtender(kVexMotor_2, kVexMotor_7, kVexMotor_8, kVexMotor_9);
+    SmartMotorSetPowerExpanderStatusPort(kVexAnalog_2);
+    SmartMotorsAddPowerExtender(kVexMotor_4, kVexMotor_7, kVexMotor_8, kVexMotor_9);
     systemInitAll();
     SmartMotorRun();
     // serverInit();
