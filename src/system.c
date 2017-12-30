@@ -1,4 +1,4 @@
-// -*- mode: c; tab-width: 4; indent-tabs-mode: nil; st-rulers: [132] -*-
+// -*- mo----de: c; tab-width: 4; indent-tabs-mode: nil; st-rulers: [132] -*-
 // vim: ts=4 sw=4 ft=c++ et
 /*-----------------------------------------------------------------------------*/
 /** @file    system.c                                                          */
@@ -46,7 +46,7 @@ void
 systemStartAll(void)
 {
     system_t *system = systems;
-    while (system != NULL && system->init != NULL) {
+    while (system != NULL && system->start != NULL) {
         if (system->enabled == true) {
             system->start();
         }
@@ -62,7 +62,7 @@ void
 systemLockAll(void)
 {
     system_t *system = systems;
-    while (system != NULL && system->init != NULL) {
+    while (system != NULL && system->lock != NULL) {
         if (system->enabled == true) {
             system->lock();
         }
@@ -78,7 +78,7 @@ void
 systemUnlockAll(void)
 {
     system_t *system = systems;
-    while (system != NULL && system->init != NULL) {
+    while (system != NULL && system->unlock != NULL) {
         if (system->enabled == true) {
             system->unlock();
         }

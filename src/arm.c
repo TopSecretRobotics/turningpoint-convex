@@ -151,10 +151,10 @@ armThread(void *arg)
                     arm.command = armCommandFloor;
                     arm.lock->enabled = 1;
                     arm.lock->target_value = arm.floorValue;
-                } else if (vexControllerGet(Btn8R) || vexControllerGet(Btn8RXmtr2)) {
-                    arm.command = armCommandCarry;
-                    arm.lock->enabled = 1;
-                    arm.lock->target_value = arm.carryValue;
+                    // } else if (vexControllerGet(Btn8R) || vexControllerGet(Btn8RXmtr2)) {
+                    //     arm.command = armCommandCarry;
+                    //     arm.lock->enabled = 1;
+                    //     arm.lock->target_value = arm.carryValue;
                 } else if (vexControllerGet(Btn8U) || vexControllerGet(Btn8UXmtr2)) {
                     arm.command = armCommandCeiling;
                     arm.lock->enabled = 1;

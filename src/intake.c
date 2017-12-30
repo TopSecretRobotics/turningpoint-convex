@@ -112,8 +112,8 @@ limitSpeed(int speed, int limit)
 static msg_t
 intakeThread(void *arg)
 {
-    bool buttonNormal = false;
-    bool buttonReverse = false;
+    bool buttonIn = false;
+    bool buttonOut = false;
     int16_t intakeCmd = 0;
     bool immediate = false;
 
@@ -125,14 +125,14 @@ intakeThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (intake.locked) {
-            buttonNormal = (bool)vexControllerGet(Btn6U);
-            buttonReverse = (bool)vexControllerGet(Btn6D);
-            if (buttonNormal == buttonReverse) {
+            buttonIn = (bool)vexControllerGet(Btn6U);
+            buttonOut = (bool)vexControllerGet(Btn6D);
+            if (buttonIn == buttonOut) {
                 intakeCmd = 0;
-            } else if (buttonNormal == true) {
-                intakeCmd = 64;
-            } else if (buttonReverse == true) {
-                intakeCmd = -64;
+            } else if (buttonIn == true) {
+                intakeCmd = 127;
+            } else if (buttonOut == true) {
+                intakeCmd = -127;
             }
             intakeCmd = intakeSpeed(intakeCmd);
             intakeMove(intakeCmd, immediate);

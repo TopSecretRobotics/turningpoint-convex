@@ -29,12 +29,12 @@ enum { SFP_ESC = 0x7d, SFP_FLAG = 0x7e };
 
 #define SFP_CRC_SIZE sizeof(SFPcrc)
 #define SFP_CRC_PRESET                                                                                                             \
-    0xffff /* The initial value for the CRC, recommended \ \ \                                                                                                                                 \
+    0xffff /* The initial value for the CRC, recommended \ \ \ \ \ \ \ \ \ \                                                                                                                                 \
             * by an article in Dr. Dobb's Journal */
 
 #define SFP_CRC_GOOD                                                                                                               \
-    0xf0b8 /* A CRC updated over its bitwise complement, \ \ \                                                                                                                                 \
-            * least significant byte first, results in \ \ \                                                                                                                                 \
+    0xf0b8 /* A CRC updated over its bitwise complement, \ \ \ \ \ \ \ \ \ \                                                                                                                                 \
+            * least significant byte first, results in \ \ \ \ \ \ \ \ \ \                                                                                                                                 \
             * this value. */
 
 /* Header format:

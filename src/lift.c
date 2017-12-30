@@ -151,10 +151,10 @@ liftThread(void *arg)
                     lift.command = liftCommandFloor;
                     lift.lock->enabled = 1;
                     lift.lock->target_value = lift.floorValue;
-                } else if (vexControllerGet(Btn7L) || vexControllerGet(Btn7LXmtr2)) {
-                    lift.command = liftCommandCarry;
-                    lift.lock->enabled = 1;
-                    lift.lock->target_value = lift.carryValue;
+                    // } else if (vexControllerGet(Btn7L) || vexControllerGet(Btn7LXmtr2)) {
+                    //     lift.command = liftCommandCarry;
+                    //     lift.lock->enabled = 1;
+                    //     lift.lock->target_value = lift.carryValue;
                 } else if (vexControllerGet(Btn7U) || vexControllerGet(Btn7UXmtr2)) {
                     lift.command = liftCommandCeiling;
                     lift.lock->enabled = 1;
