@@ -78,11 +78,11 @@ static vexDigiCfg dConfig[kVexDigital_Num] = {
 // Motor configuration
 static vexMotorCfg mConfig[kVexMotorNum] = {{kVexMotor_1, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_2, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-                                            {kVexMotor_3, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_3, kVexMotor393S, kVexMotorNormal, kVexSensorIME, kImeChannel_2},
                                             {kVexMotor_4, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_1},
                                             {kVexMotor_5, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_3},
                                             {kVexMotor_6, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_7, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_2},
+                                            {kVexMotor_7, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
                                             {kVexMotor_8, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
                                             {kVexMotor_9, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_10, kVexMotorUndefined, kVexMotorNormal, kVexSensorNone, 0}};

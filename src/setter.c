@@ -113,7 +113,7 @@ static msg_t
 setterThread(void *arg)
 {
     int16_t setterCmd = 0;
-    bool immediate = false;
+    bool immediate = true;
 
     // Unused
     (void)arg;
