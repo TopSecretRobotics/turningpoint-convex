@@ -78,11 +78,11 @@ static vexDigiCfg dConfig[kVexDigital_Num] = {
 // Motor configuration
 static vexMotorCfg mConfig[kVexMotorNum] = {{kVexMotor_1, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_2, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-                                            {kVexMotor_3, kVexMotor393S, kVexMotorNormal, kVexSensorIME, kImeChannel_2},
+                                            {kVexMotor_3, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_2},
                                             {kVexMotor_4, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_1},
                                             {kVexMotor_5, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_3},
                                             {kVexMotor_6, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_7, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
+                                            {kVexMotor_7, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_8, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
                                             {kVexMotor_9, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_10, kVexMotorUndefined, kVexMotorNormal, kVexSensorNone, 0}};
@@ -101,11 +101,11 @@ vexUserSetup()
     // serverSetup(&SD3);
     armSetup(kVexMotor_3,  // arm motor
              kVexAnalog_1, // arm potentiometer
-             false,        // normal potentiometer (values increase with positive motor speed)
+             true,         // reversed potentiometer (values decrease with positive motor speed)
              (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
-             740,          // floor potentiometer value
+             780,          // floor potentiometer value
              0,            // carry potentiometer value
-             3410          // ceiling potentiometer value
+             3715          // ceiling potentiometer value
              );
     driveSetup(kVexMotor_2, // drive northeast or front-right motor
                kVexMotor_9, // drive northwest or front-left motor
