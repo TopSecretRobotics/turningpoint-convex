@@ -1,4 +1,4 @@
-FROM ubuntu:yakkety
+FROM ubuntu:17.10
 
 # Add dependencies
 RUN apt-get update && \
