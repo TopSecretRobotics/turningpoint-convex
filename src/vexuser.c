@@ -101,9 +101,9 @@ vexUserSetup()
     // serverSetup(&SD3);
     armSetup(kVexMotor_3,  // arm motor
              kVexAnalog_1, // arm potentiometer
-             true,         // reversed potentiometer (values decrease with positive motor speed)
+             false,        // normal potentiometer (values increase with positive motor speed)
              (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
-             780,          // floor potentiometer value
+             850,          // floor potentiometer value
              0,            // carry potentiometer value
              3715          // ceiling potentiometer value
              );
