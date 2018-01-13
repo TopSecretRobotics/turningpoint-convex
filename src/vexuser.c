@@ -76,15 +76,15 @@ static vexDigiCfg dConfig[kVexDigital_Num] = {
 // port 9 SW
 // port 2 NE                                          36 inches tall 30 inches deep 49 inches wide
 // Motor configuration
-static vexMotorCfg mConfig[kVexMotorNum] = {{kVexMotor_1, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_2, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
+static vexMotorCfg mConfig[kVexMotorNum] = {{kVexMotor_1, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_2, kVexMotor393T, kVexMotorReversed, kVexSensorNone, 0},
                                             {kVexMotor_3, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_2},
                                             {kVexMotor_4, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_1},
                                             {kVexMotor_5, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_3},
                                             {kVexMotor_6, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_7, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-                                            {kVexMotor_8, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-                                            {kVexMotor_9, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_8, kVexMotor393T, kVexMotorReversed, kVexSensorNone, 0},
+                                            {kVexMotor_9, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
                                             {kVexMotor_10, kVexMotorUndefined, kVexMotorNormal, kVexSensorNone, 0}};
 
 /*-----------------------------------------------------------------------------*/
@@ -106,14 +106,14 @@ vexUserSetup()
              850,          // floor potentiometer value
              0,            // carry potentiometer value
              3715          // ceiling potentiometer value
-    );
+             );
     driveSetup(kVexMotor_2, // drive northeast or front-right motor
                kVexMotor_9, // drive northwest or front-left motor
                kVexMotor_8, // drive southeast or back-right motor
                kVexMotor_1  // drive southwest or back-left motor
-    );
+               );
     intakeSetup(kVexMotor_7 // intake motor
-    );
+                );
     liftSetup(kVexMotor_4,  // lift first motor
               kVexMotor_6,  // lift second motor
               kVexAnalog_6, // lift potentiometer
@@ -122,9 +122,9 @@ vexUserSetup()
               810,          // floor potentiometer value
               0,            // carry potentiometer value (not used)
               2440          // ceiling potentiometer value
-    );
+              );
     setterSetup(kVexMotor_5 // setter motor
-    );
+                );
 }
 
 /*-----------------------------------------------------------------------------*/
