@@ -70,7 +70,7 @@ app::
 	$(MAKE) -C src
 
 format::
-	$(verbose) clang-format -i src/*.c include/*.h
+	$(verbose) clang-format -i src/*.c src/autonomous/*.c include/*.h include/autonomous/*.h
 
 ifeq ($(PLATFORM),windows)
 

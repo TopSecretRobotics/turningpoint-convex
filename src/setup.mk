@@ -9,7 +9,7 @@ CONVEX  = ../convex/cortex
 CONVEX_OPT = yes
 
 # User C code files
-VEXUSERSRC = vexuser.c $(filter-out main.c vexuser.c, $(wildcard *.c))
+VEXUSERSRC = vexuser.c $(filter-out main.c vexuser.c, $(wildcard *.c)) $(wildcard autonomous/*.c)
 
 # User CPP code files
 VEXUSERCPPSRC = $(wildcard *.cpp)
