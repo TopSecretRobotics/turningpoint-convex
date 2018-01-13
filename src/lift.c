@@ -69,6 +69,7 @@ liftGetPtr(void)
 /** @brief      Assign motor and potentiometer to the lift system.             */
 /** @param[in]  motor0 The lift first motor pair                               */
 /** @param[in]  motor1 The lift second motor pair                              */
+/** @param[in]  motor2 The lift third motor pair                               */
 /** @param[in]  potentiometer The lift potentiometer                           */
 /** @param[in]  reversed Is the lift potentiometer reversed?                   */
 /** @param[in]  gearRatio Gear ratio between motor and potentiometer           */
@@ -77,11 +78,12 @@ liftGetPtr(void)
 /** @param[in]  upValue The lift potentiometer up value                        */
 /*-----------------------------------------------------------------------------*/
 void
-liftSetup(tVexMotor motor0, tVexMotor motor1, tVexAnalogPin potentiometer, bool reversed, float gearRatio, int16_t floorValue,
-          int16_t carryValue, int16_t ceilingValue)
+liftSetup(tVexMotor motor0, tVexMotor motor1, tVexMotor motor2, tVexAnalogPin potentiometer, bool reversed, float gearRatio,
+          int16_t floorValue, int16_t carryValue, int16_t ceilingValue)
 {
     lift.motor0 = motor0;
     lift.motor1 = motor1;
+    lift.motor2 = motor2;
     lift.potentiometer = potentiometer;
     lift.reversed = reversed;
     lift.gearRatio = gearRatio;
@@ -215,6 +217,7 @@ liftMove(int16_t cmd, bool immediate)
 {
     SetMotor(lift.motor0, cmd, immediate);
     SetMotor(lift.motor1, cmd, immediate);
+    SetMotor(lift.motor2, cmd, immediate);
 }
 
 void
