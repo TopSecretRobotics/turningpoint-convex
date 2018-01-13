@@ -53,6 +53,8 @@
 #include "smartmotor.h"
 #include "vexgyro.h"
 
+#include "lcd.h"
+
 #include "arm.h"
 #include "drive.h"
 #include "intake.h"
@@ -106,6 +108,7 @@ vexUserSetup()
 {
     vexDigitalConfigure(dConfig, DIG_CONFIG_SIZE(dConfig));
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
+    lcdSetup(VEX_LCD_DISPLAY_1);
     // serverSetup(&SD3);
     armSetup(kVexMotor_3,  // arm motor
              kVexAnalog_1, // arm potentiometer
@@ -173,8 +176,55 @@ vexAutonomous(void *arg)
     // Must call this
     vexTaskRegister("auton");
 
+    vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1);
+    vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_2);
+
     // Give the system half a second to restart the LCD
     vexSleep(500);
+
+    systemStartAll();
+    systemLockAll();
+
+    while (1) {
+        switch (lcdGetMode()) {
+        case kLcdMode0:
+            autonomousMode0();
+            break;
+        case kLcdMode1:
+            autonomousMode1();
+            break;
+        case kLcdMode2:
+            autonomousMode2();
+            break;
+        case kLcdMode3:
+            autonomousMode3();
+            break;
+        case kLcdMode4:
+            autonomousMode4();
+            break;
+        case kLcdMode5:
+            autonomousMode5();
+            break;
+        case kLcdMode6:
+            autonomousMode6();
+            break;
+        case kLcdMode7:
+            autonomousMode7();
+            break;
+        case kLcdMode8:
+            autonomousMode8();
+            break;
+        case kLcdMode9:
+            autonomousMode9();
+            break;
+        default:
+            vexSleep(25); // wait 25ms before retry
+            break;
+        }
+        break;
+    }
+
+    systemLockAll();
 
     return (msg_t)0;
 }
@@ -195,9 +245,6 @@ vexOperator(void *arg)
     // Must call this
     vexTaskRegister("operator");
 
-    systemStartAll();
-    systemLockAll();
-
     // vexGyroInit(kVexAnalog_6);
 
     vexLcdClearLine(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1);
@@ -205,6 +252,9 @@ vexOperator(void *arg)
 
     // Give the system half a second to restart the LCD
     vexSleep(500);
+
+    systemStartAll();
+    systemLockAll();
 
     // vexLcdButton buttons;
     // serverIpv4_t ipv4;

@@ -7,6 +7,8 @@
 
 #include "system.h"
 
+#include "lcd.h"
+
 #include "arm.h"
 #include "drive.h"
 #include "intake.h"
@@ -14,14 +16,17 @@
 #include "setter.h"
 
 // storage for system manager
-static system_t systems[] = {
-    {true, armInit, armStart, armLock, armUnlock},
+static const system_t systems[] = {
+    {true, lcdInit, lcdStart, NULL, NULL},
+    {true, armInit, armStart, armLockCurrent, armUnlock},
     {true, driveInit, driveStart, driveLock, driveUnlock},
     {true, intakeInit, intakeStart, intakeLock, intakeUnlock},
-    {true, liftInit, liftStart, liftLock, liftUnlock},
+    {true, liftInit, liftStart, liftLockCurrent, liftUnlock},
     {true, setterInit, setterStart, setterLock, setterUnlock},
     {false, NULL, NULL, NULL, NULL},
 };
+
+static bool systemIsEmpty(const system_t *system);
 
 /*-----------------------------------------------------------------------------*/
 /** @brief      Initialize all enabled systems                                 */
@@ -29,9 +34,9 @@ static system_t systems[] = {
 void
 systemInitAll(void)
 {
-    system_t *system = systems;
-    while (system != NULL && system->init != NULL) {
-        if (system->enabled == true) {
+    const system_t *system = systems;
+    while (!systemIsEmpty(system)) {
+        if (system->enabled == true && system->init != NULL) {
             system->init();
         }
         system++;
@@ -45,9 +50,9 @@ systemInitAll(void)
 void
 systemStartAll(void)
 {
-    system_t *system = systems;
-    while (system != NULL && system->start != NULL) {
-        if (system->enabled == true) {
+    const system_t *system = systems;
+    while (!systemIsEmpty(system)) {
+        if (system->enabled == true && system->start != NULL) {
             system->start();
         }
         system++;
@@ -61,9 +66,9 @@ systemStartAll(void)
 void
 systemLockAll(void)
 {
-    system_t *system = systems;
-    while (system != NULL && system->lock != NULL) {
-        if (system->enabled == true) {
+    const system_t *system = systems;
+    while (!systemIsEmpty(system)) {
+        if (system->enabled == true && system->lock != NULL) {
             system->lock();
         }
         system++;
@@ -77,12 +82,24 @@ systemLockAll(void)
 void
 systemUnlockAll(void)
 {
-    system_t *system = systems;
-    while (system != NULL && system->unlock != NULL) {
-        if (system->enabled == true) {
+    const system_t *system = systems;
+    while (!systemIsEmpty(system)) {
+        if (system->enabled == true && system->unlock != NULL) {
             system->unlock();
         }
         system++;
     }
     return;
+}
+
+// Inline functions
+
+inline bool
+systemIsEmpty(const system_t *system)
+{
+    if (system == NULL || (system->init == NULL && system->start == NULL && system->lock == NULL && system->unlock == NULL)) {
+        return true;
+    } else {
+        return false;
+    }
 }
