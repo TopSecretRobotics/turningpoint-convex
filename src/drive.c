@@ -127,8 +127,14 @@ driveThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (drive.locked) {
-            driveX = driveSpeed(vexControllerGet(Ch4));
-            driveY = driveSpeed(vexControllerGet(Ch3));
+            driveX = 0;
+            driveY = 0;
+            if (!vexControllerGet(Btn5U)) {
+                driveX = vexControllerGet(Ch4);
+                driveY = vexControllerGet(Ch3);
+            }
+            driveX = driveSpeed(driveX);
+            driveY = driveSpeed(driveY);
             driveMove(driveX, driveY, maybeImmediate());
         }
 

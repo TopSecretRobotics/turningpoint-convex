@@ -19,7 +19,7 @@
 extern "C" {
 #endif
 
-typedef enum { liftCommandFree = -1, liftCommandFloor = 0, liftCommandCarry, liftCommandCeiling } liftCommand_t;
+typedef enum { liftCommandFree = -1, liftCommandFloor = 0, liftCommandCeiling } liftCommand_t;
 
 typedef struct lift_s {
     tVexMotor motor0;
@@ -29,7 +29,6 @@ typedef struct lift_s {
     bool reversed;
     float gearRatio;
     int16_t floorValue;
-    int16_t carryValue;
     int16_t ceilingValue;
     liftCommand_t command;
     bool locked;
@@ -38,14 +37,13 @@ typedef struct lift_s {
 
 extern lift_t *liftGetPtr(void);
 extern void liftSetup(tVexMotor motor0, tVexMotor motor1, tVexMotor motor2, tVexAnalogPin potentiometer, bool reversed,
-                      float gearRatio, int16_t floorValue, int16_t carryValue, int16_t ceilingValue);
+                      float gearRatio, int16_t floorValue, int16_t ceilingValue);
 extern void liftInit(void);
 extern void liftStart(void);
 extern void liftMove(int16_t cmd, bool immediate);
 extern void liftLock(void);
 extern void liftUnlock(void);
 extern void liftLockFloor(void);
-extern void liftLockCarry(void);
 extern void liftLockCeiling(void);
 extern void liftLockCurrent(void);
 

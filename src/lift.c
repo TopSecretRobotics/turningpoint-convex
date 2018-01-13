@@ -73,13 +73,12 @@ liftGetPtr(void)
 /** @param[in]  potentiometer The lift potentiometer                           */
 /** @param[in]  reversed Is the lift potentiometer reversed?                   */
 /** @param[in]  gearRatio Gear ratio between motor and potentiometer           */
-/** @param[in]  downValue The lift potentiometer down value                    */
-/** @param[in]  bumpValue The lift potentiometer bump value                    */
-/** @param[in]  upValue The lift potentiometer up value                        */
+/** @param[in]  floorValue The lift potentiometer floor value                  */
+/** @param[in]  ceilingValue The lift potentiometer ceiling value              */
 /*-----------------------------------------------------------------------------*/
 void
 liftSetup(tVexMotor motor0, tVexMotor motor1, tVexMotor motor2, tVexAnalogPin potentiometer, bool reversed, float gearRatio,
-          int16_t floorValue, int16_t carryValue, int16_t ceilingValue)
+          int16_t floorValue, int16_t ceilingValue)
 {
     lift.motor0 = motor0;
     lift.motor1 = motor1;
@@ -88,7 +87,6 @@ liftSetup(tVexMotor motor0, tVexMotor motor1, tVexMotor motor2, tVexAnalogPin po
     lift.reversed = reversed;
     lift.gearRatio = gearRatio;
     lift.floorValue = floorValue;
-    lift.carryValue = carryValue;
     lift.ceilingValue = ceilingValue;
     lift.command = liftCommandFree;
     lift.locked = true;
@@ -145,7 +143,11 @@ liftThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (lift.locked) {
-            liftCmd = liftSpeed(limitSpeed(vexControllerGet(Ch3Xmtr2), 20));
+            liftCmd = vexControllerGet(Ch3Xmtr2);
+            if (vexControllerGet(Btn5U)) {
+                liftCmd = vexControllerGet(Ch3);
+            }
+            liftCmd = liftSpeed(limitSpeed(liftCmd, 20));
 
             if (liftCmd == 0) {
                 immediate = false;
@@ -153,10 +155,6 @@ liftThread(void *arg)
                     lift.command = liftCommandFloor;
                     lift.lock->enabled = 1;
                     lift.lock->target_value = lift.floorValue;
-                    // } else if (vexControllerGet(Btn7L) || vexControllerGet(Btn7LXmtr2)) {
-                    //     lift.command = liftCommandCarry;
-                    //     lift.lock->enabled = 1;
-                    //     lift.lock->target_value = lift.carryValue;
                 } else if (vexControllerGet(Btn7U) || vexControllerGet(Btn7UXmtr2)) {
                     lift.command = liftCommandCeiling;
                     lift.lock->enabled = 1;
@@ -239,15 +237,6 @@ liftLockFloor(void)
     lift.command = liftCommandFloor;
     lift.lock->enabled = 1;
     lift.lock->target_value = lift.floorValue;
-}
-
-void
-liftLockCarry(void)
-{
-    liftLock();
-    lift.command = liftCommandCarry;
-    lift.lock->enabled = 1;
-    lift.lock->target_value = lift.carryValue;
 }
 
 void

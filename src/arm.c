@@ -67,25 +67,25 @@ armGetPtr(void)
 
 /*-----------------------------------------------------------------------------*/
 /** @brief      Assign motor and potentiometer to the arm system.              */
-/** @param[in]  topMotorPair The arm top motor pair                            */
-/** @param[in]  middleMotorPair The arm middle motor pair                      */
-/** @param[in]  bottomMotorPair The arm bottom motor pair                      */
+/** @param[in]  motor The arm motor (possibly a y-cabled pair)                 */
 /** @param[in]  potentiometer The arm potentiometer                            */
 /** @param[in]  reversed Is the arm potentiometer reversed?                    */
 /** @param[in]  gearRatio Gear ratio between motor and potentiometer           */
-/** @param[in]  downValue The arm potentiometer down value                     */
-/** @param[in]  bumpValue The arm potentiometer bump value                     */
-/** @param[in]  upValue The arm potentiometer up value                         */
+/** @param[in]  floorValue The arm potentiometer floor value                   */
+/** @param[in]  pickupValue The arm potentiometer pickup value                 */
+/** @param[in]  carryValue The arm potentiometer carry value                   */
+/** @param[in]  ceilingValue The arm potentiometer ceiling value               */
 /*-----------------------------------------------------------------------------*/
 void
-armSetup(tVexMotor motor, tVexAnalogPin potentiometer, bool reversed, float gearRatio, int16_t floorValue, int16_t carryValue,
-         int16_t ceilingValue)
+armSetup(tVexMotor motor, tVexAnalogPin potentiometer, bool reversed, float gearRatio, int16_t floorValue, int16_t pickupValue,
+         int16_t carryValue, int16_t ceilingValue)
 {
     arm.motor = motor;
     arm.potentiometer = potentiometer;
     arm.reversed = reversed;
     arm.gearRatio = gearRatio;
     arm.floorValue = floorValue;
+    arm.pickupValue = pickupValue;
     arm.carryValue = carryValue;
     arm.ceilingValue = ceilingValue;
     arm.command = armCommandFree;
@@ -143,7 +143,11 @@ armThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (arm.locked) {
-            armCmd = armSpeed(limitSpeed(vexControllerGet(Ch2Xmtr2), 20));
+            armCmd = vexControllerGet(Ch2Xmtr2);
+            if (vexControllerGet(Btn5U)) {
+                armCmd = vexControllerGet(Ch2);
+            }
+            armCmd = armSpeed(limitSpeed(armCmd, 20));
 
             if (armCmd == 0) {
                 immediate = false;
@@ -151,10 +155,14 @@ armThread(void *arg)
                     arm.command = armCommandFloor;
                     arm.lock->enabled = 1;
                     arm.lock->target_value = arm.floorValue;
-                    // } else if (vexControllerGet(Btn8R) || vexControllerGet(Btn8RXmtr2)) {
-                    //     arm.command = armCommandCarry;
-                    //     arm.lock->enabled = 1;
-                    //     arm.lock->target_value = arm.carryValue;
+                } else if (vexControllerGet(Btn8L) || vexControllerGet(Btn8LXmtr2)) {
+                    arm.command = armCommandPickup;
+                    arm.lock->enabled = 1;
+                    arm.lock->target_value = arm.pickupValue;
+                } else if (vexControllerGet(Btn8R) || vexControllerGet(Btn8RXmtr2)) {
+                    arm.command = armCommandCarry;
+                    arm.lock->enabled = 1;
+                    arm.lock->target_value = arm.carryValue;
                 } else if (vexControllerGet(Btn8U) || vexControllerGet(Btn8UXmtr2)) {
                     arm.command = armCommandCeiling;
                     arm.lock->enabled = 1;
@@ -235,6 +243,15 @@ armLockFloor(void)
     arm.command = armCommandFloor;
     arm.lock->enabled = 1;
     arm.lock->target_value = arm.floorValue;
+}
+
+void
+armLockPickup(void)
+{
+    armLock();
+    arm.command = armCommandPickup;
+    arm.lock->enabled = 1;
+    arm.lock->target_value = arm.pickupValue;
 }
 
 void

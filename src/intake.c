@@ -127,6 +127,10 @@ intakeThread(void *arg)
         if (intake.locked) {
             buttonIn = (bool)vexControllerGet(Btn6UXmtr2);
             buttonOut = (bool)vexControllerGet(Btn6DXmtr2);
+            if (vexControllerGet(Btn5U)) {
+                buttonIn = (bool)vexControllerGet(Btn6U);
+                buttonOut = (bool)vexControllerGet(Btn6D);
+            }
             if (buttonIn == buttonOut) {
                 intakeCmd = 0;
             } else if (buttonIn == true) {
