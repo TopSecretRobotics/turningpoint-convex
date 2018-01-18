@@ -131,12 +131,12 @@ intakeThread(void *arg)
                 buttonIn = (bool)vexControllerGet(Btn6U);
                 buttonOut = (bool)vexControllerGet(Btn6D);
             }
-            if (buttonIn == buttonOut) {
-                intakeCmd = 0;
-            } else if (buttonIn == true) {
+            if (buttonIn == true) {
                 intakeCmd = 127;
             } else if (buttonOut == true) {
                 intakeCmd = -127;
+            } else {
+                intakeCmd = 0;
             }
             intakeCmd = intakeSpeed(intakeCmd);
             intakeMove(intakeCmd, immediate);

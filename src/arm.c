@@ -102,6 +102,7 @@ armInit(void)
 {
     arm.lock = PidControllerInit(0.004, 0.0001, 0.01, kVexSensorUndefined, 0);
     arm.lock->enabled = 0;
+    SmartMotorsSetEncoderGearing(arm.motor, arm.gearRatio);
     return;
 }
 

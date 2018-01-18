@@ -115,7 +115,7 @@ vexUserSetup()
              true,         // reversed potentiometer (values decrease with positive motor speed)
              (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
              3530,         // floor potentiometer value
-             2640,         // pickup potentiometer value
+             2660,         // pickup potentiometer value
              1910,         // carry potentiometer value
              270           // ceiling potentiometer value
              );
@@ -271,7 +271,7 @@ vexOperator(void *arg)
         // if (liftCmd > -20 && liftCmd < 20) {
         //     liftCmd = 0;
         // }
-        // SetMotor(kVexMotor_4, liftCmd, true);
+        // SetMotor(kVexMotor_7, vexControllerGet(Ch3), false);
         // SetMotor(kVexMotor_6, liftCmd, true);
         // SetMotor(kVexMotor_10, liftCmd, true);
         // vexMotorSet(kVexMotor_6, vexControllerGet(Ch2));
