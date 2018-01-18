@@ -75,9 +75,9 @@ static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalO
                                               {kVexDigital_5, kVexSensorDigitalInput, kVexConfigInput, 0},
                                               {kVexDigital_6, kVexSensorDigitalInput, kVexConfigInput, 0},
                                               {kVexDigital_7, kVexSensorDigitalInput, kVexConfigInput, 0},
-                                              {kVexDigital_8, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
-                                              {kVexDigital_9, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_2},
-                                              {kVexDigital_10, kVexSensorDigitalInput, kVexConfigInput, 0},
+                                              {kVexDigital_8, kVexSensorDigitalInput, kVexConfigInput, 0},
+                                              {kVexDigital_9, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
+                                              {kVexDigital_10, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_2},
                                               {kVexDigital_11, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_1},
                                               {kVexDigital_12, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_1}};
 
@@ -112,31 +112,31 @@ vexUserSetup()
     // serverSetup(&SD3);
     armSetup(kVexMotor_3,  // arm motor
              kVexAnalog_1, // arm potentiometer
-             false,        // normal potentiometer (values increase with positive motor speed)
+             true,         // reversed potentiometer (values decrease with positive motor speed)
              (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
-             850,          // floor potentiometer value
-             1300,         // pickup potentiometer value
-             2300,         // carry potentiometer value
-             3715          // ceiling potentiometer value
-    );
+             3530,         // floor potentiometer value
+             2640,         // pickup potentiometer value
+             1910,         // carry potentiometer value
+             270           // ceiling potentiometer value
+             );
     driveSetup(kVexMotor_2, // drive northeast or front-right motor
                kVexMotor_9, // drive northwest or front-left motor
                kVexMotor_8, // drive southeast or back-right motor
                kVexMotor_1  // drive southwest or back-left motor
-    );
+               );
     intakeSetup(kVexMotor_7 // intake motor
-    );
+                );
     liftSetup(kVexMotor_4,  // lift first motor
               kVexMotor_6,  // lift second motor
               kVexMotor_10, // lift third motor
-              kVexAnalog_6, // lift potentiometer
+              kVexAnalog_3, // lift potentiometer
               false,        // normal potentiometer (values increase with positive motor speed)
               (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
               810,          // floor potentiometer value
               2440          // ceiling potentiometer value
-    );
+              );
     setterSetup(kVexMotor_5 // setter motor
-    );
+                );
 }
 
 /*-----------------------------------------------------------------------------*/

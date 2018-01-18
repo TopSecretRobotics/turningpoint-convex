@@ -24,6 +24,7 @@
 void
 autonomousMode0(void)
 {
+    // Unlocking disables PID and operator control for a component
     systemUnlockAll();
     // armUnlock();
     // driveUnlock();
