@@ -18,7 +18,7 @@
 // storage for system manager
 static const system_t systems[] = {
     {true, lcdInit, lcdStart, NULL, NULL},
-    {true, armInit, armStart, armLockCurrent, armUnlock},
+    {true, armInit, armStart, armLock, armUnlock},
     {true, driveInit, driveStart, driveLock, driveUnlock},
     {true, intakeInit, intakeStart, intakeLock, intakeUnlock},
     {true, liftInit, liftStart, liftLockCurrent, liftUnlock},

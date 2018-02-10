@@ -19,35 +19,18 @@
 extern "C" {
 #endif
 
-typedef enum { armCommandFree = -1, armCommandFloor = 0, armCommandPickup, armCommandCarry, armCommandCeiling } armCommand_t;
-
 typedef struct arm_s {
     tVexMotor motor;
-    tVexAnalogPin potentiometer;
-    bool reversed;
-    float gearRatio;
-    int16_t floorValue;
-    int16_t pickupValue;
-    int16_t carryValue;
-    int16_t ceilingValue;
-    armCommand_t command;
     bool locked;
-    pidController *lock;
 } arm_t;
 
 extern arm_t *armGetPtr(void);
-extern void armSetup(tVexMotor motor, tVexAnalogPin potentiometer, bool reversed, float gearRatio, int16_t floorValue,
-                     int16_t pickupValue, int16_t carryValue, int16_t ceilingValue);
+extern void armSetup(tVexMotor motor);
 extern void armInit(void);
 extern void armStart(void);
 extern void armMove(int16_t cmd, bool immediate);
 extern void armLock(void);
 extern void armUnlock(void);
-extern void armLockFloor(void);
-extern void armLockPickup(void);
-extern void armLockCarry(void);
-extern void armLockCeiling(void);
-extern void armLockCurrent(void);
 
 #ifdef __cplusplus
 }

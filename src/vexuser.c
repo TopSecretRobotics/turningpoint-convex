@@ -76,8 +76,8 @@ static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalO
                                               {kVexDigital_6, kVexSensorDigitalInput, kVexConfigInput, 0},
                                               {kVexDigital_7, kVexSensorDigitalInput, kVexConfigInput, 0},
                                               {kVexDigital_8, kVexSensorDigitalInput, kVexConfigInput, 0},
-                                              {kVexDigital_9, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_2},
-                                              {kVexDigital_10, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_2},
+                                              {kVexDigital_9, kVexSensorQuadEncoder, kVexConfigInput, 0},
+                                              {kVexDigital_10, kVexSensorQuadEncoder, kVexConfigInput, 0},
                                               {kVexDigital_11, kVexSensorQuadEncoder, kVexConfigQuadEnc1, kVexQuadEncoder_1},
                                               {kVexDigital_12, kVexSensorQuadEncoder, kVexConfigQuadEnc2, kVexQuadEncoder_1}};
 
@@ -85,17 +85,16 @@ static vexDigiCfg dConfig[kVexDigital_Num] = {{kVexDigital_1, kVexSensorDigitalO
 // port 9 SW
 // port 2 NE                                          36 inches tall 30 inches deep 49 inches wide
 // Motor configuration
-static vexMotorCfg mConfig[kVexMotorNum] = {
-    {kVexMotor_1, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
-    {kVexMotor_2, kVexMotor393T, kVexMotorReversed, kVexSensorNone, 0},
-    {kVexMotor_3, kVexMotor393S, kVexMotorReversed, kVexSensorQuadEncoder, kVexQuadEncoder_2},
-    {kVexMotor_4, kVexMotor393S, kVexMotorReversed, kVexSensorIME, kImeChannel_1},
-    {kVexMotor_5, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
-    {kVexMotor_6, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0},
-    {kVexMotor_7, kVexMotor393S, kVexMotorNormal, kVexSensorQuadEncoder, kVexQuadEncoder_1},
-    {kVexMotor_8, kVexMotor393T, kVexMotorReversed, kVexSensorNone, 0},
-    {kVexMotor_9, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
-    {kVexMotor_10, kVexMotor393S, kVexMotorNormal, kVexSensorNone, 0}};
+static vexMotorCfg mConfig[kVexMotorNum] = {{kVexMotor_1, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_2, kVexMotor393T, kVexMotorReversed, kVexSensorNone, 0},
+                                            {kVexMotor_3, kVexMotor393T, kVexMotorReversed, kVexSensorNone, 0},
+                                            {kVexMotor_4, kVexMotor393T, kVexMotorReversed, kVexSensorIME, kImeChannel_1},
+                                            {kVexMotor_5, kVexMotor393S, kVexMotorReversed, kVexSensorNone, 0},
+                                            {kVexMotor_6, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_7, kVexMotor393S, kVexMotorNormal, kVexSensorQuadEncoder, kVexQuadEncoder_1},
+                                            {kVexMotor_8, kVexMotor393T, kVexMotorReversed, kVexSensorNone, 0},
+                                            {kVexMotor_9, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0},
+                                            {kVexMotor_10, kVexMotor393T, kVexMotorNormal, kVexSensorNone, 0}};
 
 /*-----------------------------------------------------------------------------*/
 /** @brief      User setup                                                     */
@@ -110,14 +109,7 @@ vexUserSetup()
     vexMotorConfigure(mConfig, MOT_CONFIG_SIZE(mConfig));
     lcdSetup(VEX_LCD_DISPLAY_1);
     // serverSetup(&SD3);
-    armSetup(kVexMotor_3,  // arm motor
-             kVexAnalog_1, // arm potentiometer
-             true,         // reversed potentiometer (values decrease with positive motor speed)
-             (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
-             3530,         // floor potentiometer value
-             2660,         // pickup potentiometer value
-             1910,         // carry potentiometer value
-             270           // ceiling potentiometer value
+    armSetup(kVexMotor_3 // arm motor
              );
     driveSetup(kVexMotor_2, // drive northeast or front-right motor
                kVexMotor_9, // drive northwest or front-left motor
@@ -128,12 +120,11 @@ vexUserSetup()
                 );
     liftSetup(kVexMotor_4,  // lift first motor
               kVexMotor_6,  // lift second motor
-              kVexMotor_10, // lift third motor
-              kVexAnalog_3, // lift potentiometer
+              kVexAnalog_2, // lift potentiometer
               false,        // normal potentiometer (values increase with positive motor speed)
               (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
-              810,          // floor potentiometer value
-              2440          // ceiling potentiometer value
+              1250,         // floor potentiometer value
+              3000          // ceiling potentiometer value
               );
     setterSetup(kVexMotor_5 // setter motor
                 );
@@ -153,7 +144,7 @@ vexUserInit()
     SmartMotorsInit();
     SmartMotorCurrentMonitorEnable();
     // SmartMotorPtcMonitorEnable();
-    SmartMotorSetPowerExpanderStatusPort(kVexAnalog_2);
+    SmartMotorSetPowerExpanderStatusPort(kVexAnalog_1);
     SmartMotorsAddPowerExtender(kVexMotor_6, kVexMotor_7, kVexMotor_8, kVexMotor_9);
     systemInitAll();
     SmartMotorRun();

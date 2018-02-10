@@ -18,7 +18,6 @@ static WORKING_AREA(waArm, 512);
 
 // private functions
 static msg_t armThread(void *arg);
-static void armPIDUpdate(int16_t *cmd);
 
 // arm speed adjustment
 #define USE_ARM_SPEED_TABLE 1
@@ -68,29 +67,11 @@ armGetPtr(void)
 /*-----------------------------------------------------------------------------*/
 /** @brief      Assign motor and potentiometer to the arm system.              */
 /** @param[in]  motor The arm motor (possibly a y-cabled pair)                 */
-/** @param[in]  potentiometer The arm potentiometer                            */
-/** @param[in]  reversed Is the arm potentiometer reversed?                    */
-/** @param[in]  gearRatio Gear ratio between motor and potentiometer           */
-/** @param[in]  floorValue The arm potentiometer floor value                   */
-/** @param[in]  pickupValue The arm potentiometer pickup value                 */
-/** @param[in]  carryValue The arm potentiometer carry value                   */
-/** @param[in]  ceilingValue The arm potentiometer ceiling value               */
 /*-----------------------------------------------------------------------------*/
 void
-armSetup(tVexMotor motor, tVexAnalogPin potentiometer, bool reversed, float gearRatio, int16_t floorValue, int16_t pickupValue,
-         int16_t carryValue, int16_t ceilingValue)
+armSetup(tVexMotor motor)
 {
     arm.motor = motor;
-    arm.potentiometer = potentiometer;
-    arm.reversed = reversed;
-    arm.gearRatio = gearRatio;
-    arm.floorValue = floorValue;
-    arm.pickupValue = pickupValue;
-    arm.carryValue = carryValue;
-    arm.ceilingValue = ceilingValue;
-    arm.command = armCommandFree;
-    arm.locked = true;
-    arm.lock = NULL;
     return;
 }
 
@@ -100,9 +81,6 @@ armSetup(tVexMotor motor, tVexAnalogPin potentiometer, bool reversed, float gear
 void
 armInit(void)
 {
-    arm.lock = PidControllerInit(0.004, 0.0001, 0.01, kVexSensorUndefined, 0);
-    arm.lock->enabled = 0;
-    SmartMotorsSetEncoderGearing(arm.motor, arm.gearRatio);
     return;
 }
 
@@ -149,35 +127,6 @@ armThread(void *arg)
                 armCmd = vexControllerGet(Ch2);
             }
             armCmd = armSpeed(limitSpeed(armCmd, 20));
-
-            if (armCmd == 0) {
-                immediate = false;
-                if (vexControllerGet(Btn8D) || vexControllerGet(Btn8DXmtr2)) {
-                    arm.command = armCommandFloor;
-                    arm.lock->enabled = 1;
-                    arm.lock->target_value = arm.floorValue;
-                } else if (vexControllerGet(Btn8L) || vexControllerGet(Btn8LXmtr2)) {
-                    arm.command = armCommandPickup;
-                    arm.lock->enabled = 1;
-                    arm.lock->target_value = arm.pickupValue;
-                } else if (vexControllerGet(Btn8R) || vexControllerGet(Btn8RXmtr2)) {
-                    arm.command = armCommandCarry;
-                    arm.lock->enabled = 1;
-                    arm.lock->target_value = arm.carryValue;
-                } else if (vexControllerGet(Btn8U) || vexControllerGet(Btn8UXmtr2)) {
-                    arm.command = armCommandCeiling;
-                    arm.lock->enabled = 1;
-                    arm.lock->target_value = arm.ceilingValue;
-                }
-                armPIDUpdate(&armCmd);
-            } else {
-                arm.command = armCommandFree;
-                immediate = true;
-                // disable PID if joystick driving
-                arm.lock->enabled = 0;
-                PidControllerUpdate(arm.lock); // zero out PID
-            }
-
             armMove(armCmd, immediate);
         }
 
@@ -186,37 +135,6 @@ armThread(void *arg)
     }
 
     return ((msg_t)0);
-}
-
-static void
-armPIDUpdate(int16_t *cmdp)
-{
-    int16_t cmd;
-    // enable PID if not driving and already disabled
-    if (arm.lock->enabled == 0) {
-        arm.lock->enabled = 1;
-        arm.lock->target_value = vexAdcGet(arm.potentiometer);
-    }
-    // prevent PID from trying to lock outside bounds
-    if (arm.reversed) {
-        if (arm.lock->target_value > arm.floorValue)
-            arm.lock->target_value = arm.floorValue;
-        else if (arm.lock->target_value < arm.ceilingValue)
-            arm.lock->target_value = arm.ceilingValue;
-    } else {
-        if (arm.lock->target_value < arm.floorValue)
-            arm.lock->target_value = arm.floorValue;
-        else if (arm.lock->target_value > arm.ceilingValue)
-            arm.lock->target_value = arm.ceilingValue;
-    }
-    // update PID
-    arm.lock->sensor_value = vexAdcGet(arm.potentiometer);
-    arm.lock->error =
-        (arm.reversed) ? (arm.lock->sensor_value - arm.lock->target_value) : (arm.lock->target_value - arm.lock->sensor_value);
-    cmd = PidControllerUpdate(arm.lock);
-    cmd = armSpeed(cmd);
-    *cmdp = cmd;
-    return;
 }
 
 void
@@ -235,49 +153,4 @@ void
 armUnlock(void)
 {
     arm.locked = false;
-}
-
-void
-armLockFloor(void)
-{
-    armLock();
-    arm.command = armCommandFloor;
-    arm.lock->enabled = 1;
-    arm.lock->target_value = arm.floorValue;
-}
-
-void
-armLockPickup(void)
-{
-    armLock();
-    arm.command = armCommandPickup;
-    arm.lock->enabled = 1;
-    arm.lock->target_value = arm.pickupValue;
-}
-
-void
-armLockCarry(void)
-{
-    armLock();
-    arm.command = armCommandCarry;
-    arm.lock->enabled = 1;
-    arm.lock->target_value = arm.carryValue;
-}
-
-void
-armLockCeiling(void)
-{
-    armLock();
-    arm.command = armCommandCeiling;
-    arm.lock->enabled = 1;
-    arm.lock->target_value = arm.ceilingValue;
-}
-
-void
-armLockCurrent(void)
-{
-    armLock();
-    arm.command = armCommandFree;
-    arm.lock->enabled = 1;
-    arm.lock->target_value = vexAdcGet(arm.potentiometer);
 }
