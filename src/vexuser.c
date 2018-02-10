@@ -123,7 +123,7 @@ vexUserSetup()
               kVexAnalog_2, // lift potentiometer
               false,        // normal potentiometer (values increase with positive motor speed)
               (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
-              1250,         // floor potentiometer value
+              1150,         // floor potentiometer value
               3000          // ceiling potentiometer value
               );
     setterSetup(kVexMotor_5 // setter motor
