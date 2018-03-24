@@ -97,6 +97,25 @@ autonomousMode0(void)
         // });
 
         // timerRun()
+        timerRun(1000, { armMove(127, true); });
+
+        stopMovementOf(ROBOT_ALL, 25);
+
+        timerRun(1000, { armMove(-127, true); });
+
+        stopMovementOf(ROBOT_ALL, 25);
+
+        timerRun(1000, { armMove(127, true); });
+
+        stopMovementOf(ROBOT_ALL, 25);
+
+        timerRun(1000, { armMove(-127, true); });
+
+        stopMovementOf(ROBOT_ALL, 25);
     }
     return;
 }
+
+//  timerRun( input time in milli seconds 1000 mill = 1 sec {
+//       Grab from mode.h what you want to run (speed, true);
+// });

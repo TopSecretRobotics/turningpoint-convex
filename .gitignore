@@ -2,3 +2,4 @@
 /bin
 /convex/plugins
 /src/.dep
+*.sublime-workspace

@@ -1,4 +1,4 @@
-// -*- mode: c; tab-width: 4; indent-tabs-mode: nil; st-rulers: [132] -*-
+// -*- mode: c; tab-width: 4; inden t-tabs-mode: nil; st-rulers: [132] -*-
 // vim: ts=4 sw=4 ft=c++ et
 /*-----------------------------------------------------------------------------*/
 /** @file    intake.c                                                          */

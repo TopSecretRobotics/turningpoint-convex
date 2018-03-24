@@ -111,6 +111,8 @@ limitSpeed(int speed, int limit)
 static msg_t
 armThread(void *arg)
 {
+    bool buttonIn = false;
+    bool buttonOut = false;
     int16_t armCmd = 0;
     bool immediate = false;
 
@@ -120,13 +122,34 @@ armThread(void *arg)
     // Register the task
     vexTaskRegister("arm");
 
+    // while (!chThdShouldTerminate()) {
+    //     if (arm.locked) {
+    //         armCmd = vexControllerGet(Ch2Xmtr2);
+    //         if (vexControllerGet(Btn5U)) {
+    //             armCmd = vexControllerGet(Ch2);
+    //         }
+    //         armCmd = armSpeed(limitSpeed(armCmd, 20));
+    //         armMove(armCmd, immediate);
+    //     }
+
     while (!chThdShouldTerminate()) {
         if (arm.locked) {
-            armCmd = vexControllerGet(Ch2Xmtr2);
+            buttonIn = (bool)vexControllerGet(Btn8RXmtr2);
+            buttonOut = (bool)vexControllerGet(Btn8DXmtr2);
+            // armCmd = vexControllerGet(Ch2Xmtr2);
             if (vexControllerGet(Btn5U)) {
-                armCmd = vexControllerGet(Ch2);
+                buttonIn = (bool)vexControllerGet(Btn8R);
+                buttonOut = (bool)vexControllerGet(Btn8D);
+                // armCmd = vexControllerGet(Ch2);
             }
-            armCmd = armSpeed(limitSpeed(armCmd, 20));
+            if (buttonIn == true) {
+                armCmd = 127;
+            } else if (buttonOut == true) {
+                armCmd = -127;
+            } else {
+                armCmd = 0;
+            }
+            armCmd = armSpeed(armCmd);
             armMove(armCmd, immediate);
         }
 

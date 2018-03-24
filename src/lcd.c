@@ -201,15 +201,15 @@ lcdWrite(void)
     switch (lcd.mode) {
     case kLcdMode0:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "0 Top Secret JCL");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "0 TopSecret Jake");
         break;
     case kLcdMode1:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "1 Top Secret JCR");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "1 TopSecretCHASE");
         break;
     case kLcdMode2:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "2 Top Secret CHA");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "2 TopSecretJared");
         break;
     case kLcdMode3:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
@@ -237,7 +237,7 @@ lcdWrite(void)
         break;
     case kLcdMode9:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "9 Top Secret TES");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "9 Top Secret    ");
         break;
     default:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
