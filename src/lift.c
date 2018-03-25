@@ -183,8 +183,9 @@ liftPIDUpdate(int16_t *cmdp)
     int16_t cmd;
     // enable PID if not driving and already disabled
     if (lift.lock->enabled == 0) {
-        lift.lock->enabled = 1;
-        lift.lock->target_value = vexAdcGet(lift.potentiometer);
+        return;
+        // lift.lock->enabled = 1;
+        // lift.lock->target_value = vexAdcGet(lift.potentiometer);
     }
     // prevent PID from trying to lock outside bounds
     if (lift.reversed) {

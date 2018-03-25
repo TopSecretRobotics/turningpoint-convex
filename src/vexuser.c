@@ -122,10 +122,10 @@ vexUserSetup()
     liftSetup(kVexMotor_4,  // lift first motor
               kVexMotor_6,  // lift second motor
               kVexAnalog_2, // lift potentiometer
-              true,         // normal potentiometer (values increase with positive motor speed)
+              true,         // reversed potentiometer (values decrease with positive motor speed)
               (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
-              1065,         // floor potentiometer value
-              2981          // ceiling potentiometer value
+              3030,         // floor potentiometer value
+              1080          // ceiling potentiometer value
               );
     setterSetup(kVexMotor_5 // setter motor
                 );
@@ -259,10 +259,12 @@ vexOperator(void *arg)
 
     // Run until asked to terminate
     while (!chThdShouldTerminate()) {
-        // liftCmd = vexControllerGet(Ch3Xmtr2);
+        // liftCmd = vexControllerGet(Ch3);
         // if (liftCmd > -20 && liftCmd < 20) {
         //     liftCmd = 0;
         // }
+        // SetMotor(kVexMotor_4, liftCmd, true);
+        // SetMotor(kVexMotor_6, liftCmd, true);
         // SetMotor(kVexMotor_7, vexControllerGet(Ch3), false);
         // SetMotor(kVexMotor_6, liftCmd, true);
         // SetMotor(kVexMotor_10, liftCmd, true);
