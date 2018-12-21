@@ -12,6 +12,7 @@
 #include "arm.h"
 #include "drive.h"
 #include "intake.h"
+#include "flipper.h"
 #include "lift.h"
 #include "setter.h"
 
@@ -21,6 +22,7 @@ static const system_t systems[] = {
     {true, armInit, armStart, armLock, armUnlock},
     {true, driveInit, driveStart, driveLock, driveUnlock},
     {true, intakeInit, intakeStart, intakeLock, intakeUnlock},
+    {true, flipperInit, flipperStart, flipperLock, flipperUnlock},
     {true, liftInit, liftStart, liftLockCurrent, liftUnlock},
     {true, setterInit, setterStart, setterLock, setterUnlock},
     {false, NULL, NULL, NULL, NULL},

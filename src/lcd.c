@@ -201,43 +201,43 @@ lcdWrite(void)
     switch (lcd.mode) {
     case kLcdMode0:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "0 TopSecret Jake");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "left 3 Point");
         break;
     case kLcdMode1:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "1 TopSecretCHASE");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Right 3 Point");
         break;
     case kLcdMode2:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "2 TopSecretJared");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Right 6pt");
         break;
     case kLcdMode3:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "3 Top Secret    ");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Not Me!");
         break;
     case kLcdMode4:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "4 Top Secret    ");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Blue Rt Shot Prk");
         break;
     case kLcdMode5:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "5 Top Secret    ");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Red lt Shot Prk");
         break;
     case kLcdMode6:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "6 Top Secret    ");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Blue Right Flag");
         break;
     case kLcdMode7:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "7 Top Secret    ");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Red Left Flag");
         break;
     case kLcdMode8:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "8 Top Secret    ");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Skills Blue 6pt?"); /*Check this*/
         break;
     case kLcdMode9:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);
-        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "9 Top Secret    ");
+        vexLcdPrintf(lcd.display, VEX_LCD_LINE_2, "Skills Red 6pt");
         break;
     default:
         vexLcdPrintf(lcd.display, VEX_LCD_LINE_1, "%4.2fV   %8.1f", vexSpiGetMainBattery() / 1000.0, chTimeNow() / 1000.0);

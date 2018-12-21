@@ -33,10 +33,10 @@ const unsigned int setterSpeedTable[128] = {
 static inline int
 setterSpeed(int speed)
 {
-    if (speed > 127)
-        speed = 127;
-    else if (speed < -127)
-        speed = -127;
+    if (speed > 30)
+        speed = 30;
+    else if (speed < -30)
+        speed = -30;
     return (((speed > 0) - (speed < 0)) * setterSpeedTable[abs(speed)]);
 }
 
@@ -45,10 +45,10 @@ setterSpeed(int speed)
 static inline int
 setterSpeed(int speed)
 {
-    if (speed > 127)
-        speed = 127;
-    else if (speed < -127)
-        speed = -127;
+    if (speed > 30)
+        speed = 30;
+    else if (speed < -30)
+        speed = -30;
     return (speed);
 }
 
@@ -123,9 +123,10 @@ setterThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (setter.locked) {
-            setterCmd = 0;
-            if (!vexControllerGet(Btn5U)) {
-                setterCmd = vexControllerGet(Ch2);
+            setterCmd = 20;
+
+            if (!vexControllerGet(Btn8UXmtr2)) {
+                setterCmd = vexControllerGet(Ch2Xmtr2);
             }
             setterCmd = setterSpeed(limitSpeed(setterCmd, 20));
             setterMove(setterCmd, immediate);

@@ -18,6 +18,7 @@
 #include "arm.h"
 #include "drive.h"
 #include "intake.h"
+#include "flipper.h"
 #include "lift.h"
 #include "setter.h"
 
@@ -31,9 +32,10 @@
 #define ROBOT_ARM 0x01
 #define ROBOT_DRIVE 0x02
 #define ROBOT_INTAKE 0x04
+#define ROBOT_FLIPPER 0x06
 #define ROBOT_LIFT 0x08
 #define ROBOT_SETTER 0x10
-#define ROBOT_ALL (ROBOT_ARM | ROBOT_DRIVE | ROBOT_INTAKE | ROBOT_LIFT | ROBOT_SETTER)
+#define ROBOT_ALL (ROBOT_ARM | ROBOT_DRIVE | ROBOT_INTAKE | ROBOT_FLIPPER | ROBOT_LIFT | ROBOT_SETTER)
 
 #include "autonomous/timer.h"
 
@@ -52,6 +54,8 @@ static void driveLeft(int speed);
 /* Intake function declarations */
 static void intakeGrab(int speed);
 static void intakeRelease(int speed);
+/* Flipper function declarations */
+static void flipperFlip(int speed);
 /* Lift function declarations */
 static void liftRaise(int speed);
 static void liftLower(int speed);
@@ -117,6 +121,12 @@ intakeRelease(int speed)
     intakeMove(-speed, true);
 }
 
+inline void
+flipperFlip(int speed)
+{
+    flipperMove(speed, true);
+}
+
 /* Lift function definitions */
 
 inline void
@@ -172,6 +182,9 @@ stopMovementOf(int robot, unsigned long timeout)
         }
         if (robot & ROBOT_INTAKE) {
             intakeMove(0, true);
+        }
+        if (robot & ROBOT_FLIPPER) {
+            flipperMove(0, true);
         }
         if (robot & ROBOT_LIFT) {
             liftMove(0, true);

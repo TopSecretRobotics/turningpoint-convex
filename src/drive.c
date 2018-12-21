@@ -126,12 +126,20 @@ driveThread(void *arg)
     vexTaskRegister("drive");
 
     while (!chThdShouldTerminate()) {
+        // if (vexControllerGet(Btn5UXmtr2)) {
+        //         driveX = vexControllerGet(Ch4Xmtr2);
+        //         driveY = vexControllerGet(Ch3Xmtr2);
+        // }
         if (drive.locked) {
             driveX = 0;
             driveY = 0;
             if (!vexControllerGet(Btn5U)) {
                 driveX = vexControllerGet(Ch4);
                 driveY = vexControllerGet(Ch3);
+                if (vexControllerGet(Btn7UXmtr2)) {
+                    driveX = vexControllerGet(Ch4Xmtr2);
+                    driveY = vexControllerGet(Ch3Xmtr2);
+                }
             }
             driveX = driveSpeed(driveX);
             driveY = driveSpeed(driveY);

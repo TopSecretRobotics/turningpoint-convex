@@ -115,13 +115,11 @@ armThread(void *arg)
     bool buttonOut = false;
     int16_t armCmd = 0;
     bool immediate = false;
-
     // Unused
     (void)arg;
 
     // Register the task
     vexTaskRegister("arm");
-
     // while (!chThdShouldTerminate()) {
     //     if (arm.locked) {
     //         armCmd = vexControllerGet(Ch2Xmtr2);
@@ -131,15 +129,16 @@ armThread(void *arg)
     //         armCmd = armSpeed(limitSpeed(armCmd, 20));
     //         armMove(armCmd, immediate);
     //     }
-
     while (!chThdShouldTerminate()) {
         if (arm.locked) {
-            buttonIn = (bool)vexControllerGet(Btn8RXmtr2);
-            buttonOut = (bool)vexControllerGet(Btn8DXmtr2);
             // armCmd = vexControllerGet(Ch2Xmtr2);
-            if (vexControllerGet(Btn5U)) {
-                buttonIn = (bool)vexControllerGet(Btn8R);
-                buttonOut = (bool)vexControllerGet(Btn8D);
+            buttonIn = (bool)vexControllerGet(Btn8R);
+            buttonOut = (bool)vexControllerGet(Btn8D);
+            // armCmd = vexControllerGet(Ch2Xmtr2);
+            if (vexControllerGet(Btn5UXmtr2)) {
+                // armCmd = vexControllerGet(Ch2);
+                buttonIn = (bool)vexControllerGet(Btn8RXmtr2);
+                buttonOut = (bool)vexControllerGet(Btn8DXmtr2);
                 // armCmd = vexControllerGet(Ch2);
             }
             if (buttonIn == true) {
@@ -149,11 +148,12 @@ armThread(void *arg)
             } else {
                 armCmd = 0;
             }
+            // armCmd = armSpeed(limitSpeed(armCmd, 20));
             armCmd = armSpeed(armCmd);
             armMove(armCmd, immediate);
         }
 
-        // Don't hog cpu
+        //     Don't hog cpu
         vexSleep(25);
     }
 

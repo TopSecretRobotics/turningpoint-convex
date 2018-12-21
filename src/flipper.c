@@ -1,29 +1,24 @@
-// -*- mode: c; tab-width: 4; inden t-tabs-mode: nil; st-rulers: [132] -*-
-// vim: ts=4 sw=4 ft=c++ et
-/*-----------------------------------------------------------------------------*/
-/** @file    intake.c                                                          */
-/** @brief   The intake system for the robot                                   */
-/*-----------------------------------------------------------------------------*/
 
-#include "intake.h"
+
+#include "flipper.h"
 
 #include <math.h>
 #include <stdlib.h>
 
-// storage for intake
-static intake_t intake;
+// storage for flipper
+static flipper_t flipper;
 
-// working area for intake task
-static WORKING_AREA(waIntake, 512);
+// working area for flipper task
+static WORKING_AREA(waflipper, 512);
 
 // private functions
-static msg_t intakeThread(void *arg);
+static msg_t flipperThread(void *arg);
 
-// intake speed adjustment
-#define USE_INTAKE_SPEED_TABLE 1
-#ifdef USE_INTAKE_SPEED_TABLE
+// flipper speed adjustment
+#define USE_flipper_SPEED_TABLE 1
+#ifdef USE_flipper_SPEED_TABLE
 
-const unsigned int intakeSpeedTable[128] = {
+const unsigned int flipperSpeedTable[128] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  21, 21, 21, 22, 22, 22, 23, 24, 24, 25, 25,  25,  25, 26, 27,
     27, 28, 28, 28, 28, 29, 30, 30, 30, 31, 31, 32, 32, 32, 33, 33, 34, 34, 35, 35, 35, 36,  36,  37, 37, 37,
     37, 38, 38, 39, 39, 39, 40, 40, 41, 41, 42, 42, 43, 44, 44, 45, 45, 46, 46, 47, 47, 48,  48,  49, 50, 50,
@@ -31,19 +26,19 @@ const unsigned int intakeSpeedTable[128] = {
     74, 76, 77, 78, 79, 79, 80, 81, 83, 84, 84, 86, 86, 87, 87, 88, 88, 89, 89, 90, 90, 127, 127, 127};
 
 static inline int
-intakeSpeed(int speed)
+flipperSpeed(int speed)
 {
     if (speed > 127)
         speed = 127;
     else if (speed < -127)
         speed = -127;
-    return (((speed > 0) - (speed < 0)) * intakeSpeedTable[abs(speed)]);
+    return (((speed > 0) - (speed < 0)) * flipperSpeedTable[abs(speed)]);
 }
 
 #else
 
 static inline int
-intakeSpeed(int speed)
+flipperSpeed(int speed)
 {
     if (speed > 127)
         speed = 127;
@@ -55,43 +50,43 @@ intakeSpeed(int speed)
 #endif
 
 /*-----------------------------------------------------------------------------*/
-/** @brief      Get pointer to intake structure - not used locally             */
-/** @return     A intake_t pointer                                             */
+/** @brief      Get pointer to flipper structure - not used locally             */
+/** @return     A flipper_t pointer                                             */
 /*-----------------------------------------------------------------------------*/
-intake_t *
-intakeGetPtr(void)
+flipper_t *
+flipperGetPtr(void)
 {
-    return (&intake);
+    return (&flipper);
 }
 
 /*-----------------------------------------------------------------------------*/
-/** @brief      Assign motor to the intake system.                             */
-/** @param[in]  motor The intake motor                                         */
+/** @brief      Assign motor to the flipper system.                             */
+/** @param[in]  motor The flipper motor                                         */
 /*-----------------------------------------------------------------------------*/
 void
-intakeSetup(tVexMotor motor)
+flipperSetup(tVexMotor motor)
 {
-    intake.motor = motor;
-    intake.locked = true;
+    flipper.motor = motor;
+    flipper.locked = true;
     return;
 }
 
 /*-----------------------------------------------------------------------------*/
-/** @brief      Initialize the intake system.                                  */
+/** @brief      Initialize the flipper system.                                  */
 /*-----------------------------------------------------------------------------*/
 void
-intakeInit(void)
+flipperInit(void)
 {
     return;
 }
 
 /*-----------------------------------------------------------------------------*/
-/** @brief      Start the intake system thread                                 */
+/** @brief      Start the flipper system thread                                 */
 /*-----------------------------------------------------------------------------*/
 void
-intakeStart(void)
+flipperStart(void)
 {
-    chThdCreateStatic(waIntake, sizeof(waIntake), NORMALPRIO - 1, intakeThread, NULL);
+    chThdCreateStatic(waflipper, sizeof(waflipper), NORMALPRIO - 1, flipperThread, NULL);
     return;
 }
 
@@ -105,41 +100,41 @@ limitSpeed(int speed, int limit)
 }
 
 /*-----------------------------------------------------------------------------*/
-/** @brief      The intake system thread                                       */
+/** @brief      The flipper system thread                                       */
 /** @param[in]  arg Unused                                                     */
 /** @return     (msg_t) 0                                                      */
 /*-----------------------------------------------------------------------------*/
 static msg_t
-intakeThread(void *arg)
+flipperThread(void *arg)
 {
     bool buttonIn = false;
     bool buttonOut = false;
-    int16_t intakeCmd = 0;
+    int16_t flipperCmd = 0;
     bool immediate = false;
 
     // Unused
     (void)arg;
 
     // Register the task
-    vexTaskRegister("intake");
+    vexTaskRegister("flipper");
 
     while (!chThdShouldTerminate()) {
-        if (intake.locked) {
-            buttonIn = (bool)vexControllerGet(Btn6U);
-            buttonOut = (bool)vexControllerGet(Btn6D);
+        if (flipper.locked) {
+            buttonIn = (bool)vexControllerGet(Btn8D);
+            buttonOut = (bool)vexControllerGet(Btn8L);
             if (vexControllerGet(Btn5UXmtr2)) {
-                buttonIn = (bool)vexControllerGet(Btn6UXmtr2);
-                buttonOut = (bool)vexControllerGet(Btn6DXmtr2);
+                buttonIn = (bool)vexControllerGet(Btn8DXmtr2);
+                buttonOut = (bool)vexControllerGet(Btn8LXmtr2);
             }
             if (buttonIn == true) {
-                intakeCmd = 127;
+                flipperCmd = 127;
             } else if (buttonOut == true) {
-                intakeCmd = -127;
+                flipperCmd = -127;
             } else {
-                intakeCmd = 0;
+                flipperCmd = 0;
             }
-            intakeCmd = intakeSpeed(intakeCmd);
-            intakeMove(intakeCmd, immediate);
+            flipperCmd = flipperSpeed(flipperCmd);
+            flipperMove(flipperCmd, immediate);
         }
 
         // Don't hog cpu
@@ -150,19 +145,19 @@ intakeThread(void *arg)
 }
 
 void
-intakeMove(int16_t cmd, bool immediate)
+flipperMove(int16_t cmd, bool immediate)
 {
-    SetMotor(intake.motor, cmd, immediate);
+    SetMotor(flipper.motor, cmd, immediate);
 }
 
 void
-intakeLock(void)
+flipperLock(void)
 {
-    intake.locked = true;
+    flipper.locked = true;
 }
 
 void
-intakeUnlock(void)
+flipperUnlock(void)
 {
-    intake.locked = false;
+    flipper.locked = false;
 }

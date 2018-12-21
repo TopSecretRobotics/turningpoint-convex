@@ -18,7 +18,7 @@ static WORKING_AREA(waLift, 512);
 
 // private functions
 static msg_t liftThread(void *arg);
-static void liftPIDUpdate(int16_t *cmd);
+// static void liftPIDUpdate(int16_t *cmd);
 
 // lift speed adjustment
 #define USE_LIFT_SPEED_TABLE 1
@@ -130,6 +130,8 @@ limitSpeed(int speed, int limit)
 static msg_t
 liftThread(void *arg)
 {
+    bool buttonIn = false;
+    bool buttonOut = false;
     int16_t liftCmd = 0;
     bool immediate = false;
 
@@ -141,33 +143,45 @@ liftThread(void *arg)
 
     while (!chThdShouldTerminate()) {
         if (lift.locked) {
-            liftCmd = vexControllerGet(Ch3Xmtr2);
-            if (vexControllerGet(Btn5U)) {
-                liftCmd = vexControllerGet(Ch3);
+            buttonIn = vexControllerGet(Btn7DXmtr2);
+            // buttonIn = vexControllerGet(Btn7DXmtr2);
+            buttonOut = vexControllerGet(Btn7LXmtr2);
+            // buttonOut = vexControllerGet(Btn7LXmtr2);
+            if (vexControllerGet(Btn5D)) {
+                buttonIn = vexControllerGet(Btn7D);
             }
-            liftCmd = liftSpeed(limitSpeed(liftCmd, 20));
-
-            if (liftCmd == 0) {
-                immediate = false;
-                if (vexControllerGet(Btn7D) || vexControllerGet(Btn7DXmtr2)) {
-                    lift.command = liftCommandFloor;
-                    lift.lock->enabled = 1;
-                    lift.lock->target_value = lift.floorValue;
-                } else if (vexControllerGet(Btn7U) || vexControllerGet(Btn7UXmtr2)) {
-                    lift.command = liftCommandCeiling;
-                    lift.lock->enabled = 1;
-                    lift.lock->target_value = lift.ceilingValue;
-                }
-                liftPIDUpdate(&liftCmd);
+            // liftCmd = liftSpeed(limitSpeed(liftCmd, 20));
+            if (buttonIn == true) {
+                liftCmd = 127;
+            } else if (buttonOut == true) {
+                liftCmd = -127;
             } else {
-                lift.command = liftCommandFree;
-                immediate = true;
-                // disable PID if joystick driving
-                lift.lock->enabled = 0;
-                PidControllerUpdate(lift.lock); // zero out PID
+                liftCmd = 0;
             }
-
+            liftCmd = liftSpeed(liftCmd);
             liftMove(liftCmd, immediate);
+
+            // if (liftCmd == 0) {
+            //     immediate = false;
+            //     if (vexControllerGet(Btn7D) || vexControllerGet(Btn7DXmtr2)) {
+            //         lift.command = liftCommandFloor;
+            //         lift.lock->enabled = 1;
+            //         lift.lock->target_value = lift.floorValue;
+            //     } else if (vexControllerGet(Btn7U) || vexControllerGet(Btn7UXmtr2)) {
+            //         lift.command = liftCommandCeiling;
+            //         lift.lock->enabled = 1;
+            //         lift.lock->target_value = lift.ceilingValue;
+            //     }
+            //     liftPIDUpdate(&liftCmd);
+            // } else {
+            //     lift.command = liftCommandFree;
+            //     immediate = true;
+            //     // disable PID if joystick driving
+            //     lift.lock->enabled = 0;
+            //     PidControllerUpdate(lift.lock); // zero out PID
+            // }
+
+            // liftMove(liftCmd, immediate);
         }
 
         // Don't hog cpu
@@ -177,37 +191,38 @@ liftThread(void *arg)
     return ((msg_t)0);
 }
 
-static void
-liftPIDUpdate(int16_t *cmdp)
-{
-    int16_t cmd;
-    // enable PID if not driving and already disabled
-    if (lift.lock->enabled == 0) {
-        return;
-        // lift.lock->enabled = 1;
-        // lift.lock->target_value = vexAdcGet(lift.potentiometer);
-    }
-    // prevent PID from trying to lock outside bounds
-    if (lift.reversed) {
-        if (lift.lock->target_value > lift.floorValue)
-            lift.lock->target_value = lift.floorValue;
-        else if (lift.lock->target_value < lift.ceilingValue)
-            lift.lock->target_value = lift.ceilingValue;
-    } else {
-        if (lift.lock->target_value < lift.floorValue)
-            lift.lock->target_value = lift.floorValue;
-        else if (lift.lock->target_value > lift.ceilingValue)
-            lift.lock->target_value = lift.ceilingValue;
-    }
-    // update PID
-    lift.lock->sensor_value = vexAdcGet(lift.potentiometer);
-    lift.lock->error =
-        (lift.reversed) ? (lift.lock->sensor_value - lift.lock->target_value) : (lift.lock->target_value - lift.lock->sensor_value);
-    cmd = PidControllerUpdate(lift.lock);
-    cmd = liftSpeed(cmd);
-    *cmdp = cmd;
-    return;
-}
+// static void
+// liftPIDUpdate(int16_t *cmdp)
+// {
+//     int16_t cmd;
+//     // enable PID if not driving and already disabled
+//     if (lift.lock->enabled == 0) {
+//         return;
+//         // lift.lock->enabled = 1;
+//         // lift.lock->target_value = vexAdcGet(lift.potentiometer);
+//     }
+//     // prevent PID from trying to lock outside bounds
+//     if (lift.reversed) {
+//         if (lift.lock->target_value > lift.floorValue)
+//             lift.lock->target_value = lift.floorValue;
+//         else if (lift.lock->target_value < lift.ceilingValue)
+//             lift.lock->target_value = lift.ceilingValue;
+//     } else {
+//         if (lift.lock->target_value < lift.floorValue)
+//             lift.lock->target_value = lift.floorValue;
+//         else if (lift.lock->target_value > lift.ceilingValue)
+//             lift.lock->target_value = lift.ceilingValue;
+//     }
+//     // update PID
+//     lift.lock->sensor_value = vexAdcGet(lift.potentiometer);
+//     lift.lock->error =
+//         (lift.reversed) ? (lift.lock->sensor_value - lift.lock->target_value) : (lift.lock->target_value -
+//         lift.lock->sensor_value);
+//     cmd = PidControllerUpdate(lift.lock);
+//     cmd = liftSpeed(cmd);
+//     *cmdp = cmd;
+//     return;
+// }
 
 void
 liftMove(int16_t cmd, bool immediate)
