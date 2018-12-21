@@ -15,7 +15,7 @@
  * ██╔══██║██╔══╝  ██╔══██║██║  ██║╚════██║    ██║   ██║██╔═══╝ ╚═╝
  * ██║  ██║███████╗██║  ██║██████╔╝███████║    ╚██████╔╝██║     ██╗
  * ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝     ╚═════╝ ╚═╝     ╚═╝
-  * Read the comments below carefully, I've tried to document how each
+ * Read the comments below carefully, I've tried to document how each
  * of the "helper" functions are designed to be used.
  *
  */

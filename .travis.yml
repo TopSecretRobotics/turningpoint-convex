@@ -10,16 +10,16 @@ notifications:
 
 cache:
   directories:
-    - inthezone-convex
+    - turningpoint-convex
 
 before_install:
   -
-    if [ -e "inthezone-convex/image.tar" ]; then
-      docker load -i "inthezone-convex/image.tar";
+    if [ -e "turningpoint-convex/image.tar" ]; then
+      docker load -i "turningpoint-convex/image.tar";
     else
-      docker build -t "inthezone-convex" -f Dockerfile .;
-      mkdir -p "inthezone-convex"; docker save -o "inthezone-convex/image.tar" "inthezone-convex";
+      docker build -t "turningpoint-convex" -f Dockerfile .;
+      mkdir -p "turningpoint-convex"; docker save -o "turningpoint-convex/image.tar" "turningpoint-convex";
     fi
 
 script:
-  - docker run -v `pwd`:/build/project "inthezone-convex" sh -c 'make'
+  - docker run -v `pwd`:/build/project "turningpoint-convex" sh -c 'make'

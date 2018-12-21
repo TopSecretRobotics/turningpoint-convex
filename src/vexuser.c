@@ -111,16 +111,16 @@ vexUserSetup()
     lcdSetup(VEX_LCD_DISPLAY_1);
     // serverSetup(&SD3);
     armSetup(kVexMotor_3 // arm motor
-             );
+    );
     driveSetup(kVexMotor_2, // drive northeast or front-right motor
                kVexMotor_9, // drive northwest or front-left motor
                kVexMotor_8, // drive southeast or back-right motor
                kVexMotor_1  // drive southwest or back-left motor
-               );
+    );
     flipperSetup(kVexMotor_4 // flipper motor
-                 );
+    );
     intakeSetup(kVexMotor_7 // intake motor
-                );
+    );
     liftSetup(kVexMotor_10, // lift first motor
               kVexMotor_6,  // lift second motor
               kVexAnalog_2, // lift potentiometer
@@ -128,9 +128,9 @@ vexUserSetup()
               (1.0 / 7.0),  // gear ratio (1:7 or ~857 ticks per rotation)
               3030,         // floor potentiometer value
               1080          // ceiling potentiometer value
-              );
+    );
     setterSetup(kVexMotor_5 // setter motor
-                );
+    );
 }
 
 /*-----------------------------------------------------------------------------*/

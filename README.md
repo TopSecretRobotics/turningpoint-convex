@@ -1,6 +1,6 @@
-# In the Zone ConVEX project
+# Turning Point ConVEX project
 
-[![Build Status](https://travis-ci.org/TopSecretRobotics/inthezone-convex.svg?branch=master)](https://travis-ci.org/TopSecretRobotics/inthezone-convex)
+[![Build Status](https://travis-ci.org/TopSecretRobotics/turningpoint-convex.svg?branch=master)](https://travis-ci.org/TopSecretRobotics/turningpoint-convex)
 
 This project expects [PROS](http://pros.cs.purdue.edu/) to be installed and available in the `PATH`.
 
@@ -41,8 +41,8 @@ On Windows, you will need to download [PuTTY](http://www.chiark.greenend.org.uk/
 Usage with docker:
 
 ```bash
-docker build -t "inthezone-convex" -f Dockerfile .
-docker run --rm -v `pwd`:/build/project "inthezone-convex" make
+docker build -t "turningpoint-convex" -f Dockerfile .
+docker run --rm -v `pwd`:/build/project "turningpoint-convex" make
 ```
 
 Usage with docker-compose:
