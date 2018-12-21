@@ -23,7 +23,7 @@ static const system_t systems[] = {
     {true, driveInit, driveStart, driveLock, driveUnlock},
     {true, intakeInit, intakeStart, intakeLock, intakeUnlock},
     {true, flipperInit, flipperStart, flipperLock, flipperUnlock},
-    {true, liftInit, liftStart, liftLockCurrent, liftUnlock},
+    {true, liftInit, liftStart, liftLock, liftUnlock},
     {true, setterInit, setterStart, setterLock, setterUnlock},
     {false, NULL, NULL, NULL, NULL},
 };
