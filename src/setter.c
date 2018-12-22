@@ -33,10 +33,10 @@ const unsigned int setterSpeedTable[128] = {
 static inline int
 setterSpeed(int speed)
 {
-    if (speed > 30)
-        speed = 30;
-    else if (speed < -30)
-        speed = -30;
+    if (speed > 50)
+        speed = 50;
+    else if (speed < -50)
+        speed = -50;
     return (((speed > 0) - (speed < 0)) * setterSpeedTable[abs(speed)]);
 }
 
@@ -45,10 +45,10 @@ setterSpeed(int speed)
 static inline int
 setterSpeed(int speed)
 {
-    if (speed > 30)
-        speed = 30;
-    else if (speed < -30)
-        speed = -30;
+    if (speed > 50)
+        speed = 50;
+    else if (speed < -50)
+        speed = -50;
     return (speed);
 }
 

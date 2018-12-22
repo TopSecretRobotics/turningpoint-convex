@@ -122,7 +122,7 @@ vexUserSetup()
     intakeSetup(kVexMotor_7 // intake motor
                 );
     liftSetup(kVexMotor_6,  // lift motor
-              kVexDigital_1 // lift limit sensor
+              kVexDigital_3 // lift limit sensor
               );
     setterSetup(kVexMotor_5 // setter motor
                 );
@@ -304,6 +304,8 @@ vexOperator(void *arg)
         //     // sdWrite(&SD3, (unsigned char *)message, 6);
         //     count = 0;
         // }
+
+        // vexLcdPrintf(VEX_LCD_DISPLAY_1, VEX_LCD_LINE_1, (vexDigitalPinGet(kVexDigital_3) == kVexDigitalHigh) ? "HIGH" : "LOW");
 
         // Don't hog cpu
         vexSleep(25);

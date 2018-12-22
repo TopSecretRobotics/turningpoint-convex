@@ -136,8 +136,8 @@ liftThread(void *arg)
                 if (buttonHold == true) {
                     liftCmd = 127;
                     immediate = true;
-                } else if (vexDigitalPinGet(lift.limit) == kVexDigitalHigh) {
-                    liftCmd = 0;
+                } else if (vexDigitalPinGet(lift.limit) == kVexDigitalLow) {
+                    liftCmd = 32;
                     immediate = true;
                 } else {
                     liftCmd = 127;
