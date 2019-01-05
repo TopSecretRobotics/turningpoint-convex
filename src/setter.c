@@ -125,7 +125,7 @@ setterThread(void *arg)
         if (setter.locked) {
             setterCmd = 20;
 
-            if (!vexControllerGet(Btn8UXmtr2)) {
+            if (!vexControllerGet(Btn7RXmtr2)) {
                 setterCmd = vexControllerGet(Ch2Xmtr2);
             }
             setterCmd = setterSpeed(limitSpeed(setterCmd, 20));

@@ -136,41 +136,38 @@ driveThread(void *arg)
             if (!vexControllerGet(Btn5U)) {
                 driveX = vexControllerGet(Ch4);
                 driveY = vexControllerGet(Ch3);
-                if (vexControllerGet(Btn7UXmtr2)) {
+                if (vexControllerGet(Btn5DXmtr2)) {
                     driveX = vexControllerGet(Ch4Xmtr2);
                     driveY = vexControllerGet(Ch3Xmtr2);
+                    }
                 }
+                driveX = driveSpeed(driveX);
+                driveY = driveSpeed(driveY);
+                driveMove(driveX, driveY, maybeImmediate());
             }
-            driveX = driveSpeed(driveX);
-            driveY = driveSpeed(driveY);
-            driveMove(driveX, driveY, maybeImmediate());
+
+            // Don't hog cpu
+            vexSleep(25);
         }
 
-        // Don't hog cpu
-        vexSleep(25);
+        return ((msg_t)0);
     }
 
-    return ((msg_t)0);
-}
+    void driveMove(int16_t x, int16_t y, bool immediate)
+    {
+        SetMotor(drive.northeast, driveSpeed(y - x), immediate);
+        SetMotor(drive.northwest, driveSpeed(y + x), immediate);
+        SetMotor(drive.southeast, driveSpeed(y - x), immediate);
+        SetMotor(drive.southwest, driveSpeed(y + x), immediate);
+        return;
+    }
 
-void
-driveMove(int16_t x, int16_t y, bool immediate)
-{
-    SetMotor(drive.northeast, driveSpeed(y - x), immediate);
-    SetMotor(drive.northwest, driveSpeed(y + x), immediate);
-    SetMotor(drive.southeast, driveSpeed(y - x), immediate);
-    SetMotor(drive.southwest, driveSpeed(y + x), immediate);
-    return;
-}
+    void driveLock(void)
+    {
+        drive.locked = true;
+    }
 
-void
-driveLock(void)
-{
-    drive.locked = true;
-}
-
-void
-driveUnlock(void)
-{
-    drive.locked = false;
-}
+    void driveUnlock(void)
+    {
+        drive.locked = false;
+    }

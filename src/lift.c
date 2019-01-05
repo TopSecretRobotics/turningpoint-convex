@@ -137,8 +137,9 @@ liftThread(void *arg)
                     liftCmd = 127;
                     immediate = true;
                 } else if (vexDigitalPinGet(lift.limit) == kVexDigitalLow) {
-                    liftCmd = 32;
+                    liftCmd = 15;
                     immediate = true;
+                    vexSleep(25);
                 } else {
                     liftCmd = 127;
                     immediate = false;

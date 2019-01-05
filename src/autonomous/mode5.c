@@ -89,7 +89,7 @@ autonomousMode5(void)
             });
         }
         // Park on 6pt
-
+/*
         timerRun(17, { driveMove(-127, 0, true); });
         {
             stopMovementOf(ROBOT_DRIVE, 150);
@@ -119,6 +119,7 @@ autonomousMode5(void)
 
             stopMovementOf(ROBOT_ALL, 1000);
         }
+*/
     }
 
     return;
