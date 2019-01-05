@@ -131,43 +131,45 @@ driveThread(void *arg)
         //         driveY = vexControllerGet(Ch3Xmtr2);
         // }
         if (drive.locked) {
-            driveX = 0;
-            driveY = 0;
-            if (!vexControllerGet(Btn5U)) {
-                driveX = vexControllerGet(Ch4);
-                driveY = vexControllerGet(Ch3);
-                if (vexControllerGet(Btn5DXmtr2)) {
-                    driveX = vexControllerGet(Ch4Xmtr2);
-                    driveY = vexControllerGet(Ch3Xmtr2);
-                    }
+            // driveX = 0;
+            // driveY = 0;
+            driveX = vexControllerGet(Ch4);
+            driveY = vexControllerGet(Ch3);
+            if (vexControllerGet(Btn5U)) {
+                if (abs(driveX) > 64) {
+                    driveX = ((driveX >= 0) ? 1 : -1) * 64;
                 }
-                driveX = driveSpeed(driveX);
-                driveY = driveSpeed(driveY);
-                driveMove(driveX, driveY, maybeImmediate());
+                if (abs(driveY) > 64) {
+                    driveY = ((driveY >= 0) ? 1 : -1) * 64;
+                }
             }
-
-            // Don't hog cpu
-            vexSleep(25);
+            driveX = driveSpeed(driveX);
+            driveY = driveSpeed(driveY);
+            driveMove(driveX, driveY, maybeImmediate());
         }
 
-        return ((msg_t)0);
+        // Don't hog cpu
+        vexSleep(25);
     }
 
-    void driveMove(int16_t x, int16_t y, bool immediate)
-    {
-        SetMotor(drive.northeast, driveSpeed(y - x), immediate);
-        SetMotor(drive.northwest, driveSpeed(y + x), immediate);
-        SetMotor(drive.southeast, driveSpeed(y - x), immediate);
-        SetMotor(drive.southwest, driveSpeed(y + x), immediate);
-        return;
-    }
+    return ((msg_t)0);
+}
 
-    void driveLock(void)
-    {
-        drive.locked = true;
-    }
+void driveMove(int16_t x, int16_t y, bool immediate)
+{
+    SetMotor(drive.northeast, driveSpeed(y - x), immediate);
+    SetMotor(drive.northwest, driveSpeed(y + x), immediate);
+    SetMotor(drive.southeast, driveSpeed(y - x), immediate);
+    SetMotor(drive.southwest, driveSpeed(y + x), immediate);
+    return;
+}
 
-    void driveUnlock(void)
-    {
-        drive.locked = false;
-    }
+void driveLock(void)
+{
+    drive.locked = true;
+}
+
+void driveUnlock(void)
+{
+    drive.locked = false;
+}

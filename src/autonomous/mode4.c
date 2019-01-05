@@ -118,7 +118,7 @@ autonomousMode4(void)
     //     });
 
     //     stopMovementOf(ROBOT_ALL, 1000);
-    // }
+    }
 
     return;
 }
