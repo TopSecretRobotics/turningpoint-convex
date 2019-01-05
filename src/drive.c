@@ -155,7 +155,8 @@ driveThread(void *arg)
     return ((msg_t)0);
 }
 
-void driveMove(int16_t x, int16_t y, bool immediate)
+void
+driveMove(int16_t x, int16_t y, bool immediate)
 {
     SetMotor(drive.northeast, driveSpeed(y - x), immediate);
     SetMotor(drive.northwest, driveSpeed(y + x), immediate);
@@ -164,12 +165,14 @@ void driveMove(int16_t x, int16_t y, bool immediate)
     return;
 }
 
-void driveLock(void)
+void
+driveLock(void)
 {
     drive.locked = true;
 }
 
-void driveUnlock(void)
+void
+driveUnlock(void)
 {
     drive.locked = false;
 }

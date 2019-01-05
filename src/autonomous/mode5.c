@@ -89,37 +89,37 @@ autonomousMode5(void)
             });
         }
         // Park on 6pt
-/*
-        timerRun(17, { driveMove(-127, 0, true); });
-        {
-            stopMovementOf(ROBOT_DRIVE, 150);
+        /*
+                timerRun(17, { driveMove(-127, 0, true); });
+                {
+                    stopMovementOf(ROBOT_DRIVE, 150);
 
-            timerRun(625, { driveMove(7, -127, true); });
+                    timerRun(625, { driveMove(7, -127, true); });
 
-            stopMovementOf(ROBOT_DRIVE, 120);
+                    stopMovementOf(ROBOT_DRIVE, 120);
 
-            // timerRun(50, {
-            // liftMove(127, true);
-            // });
+                    // timerRun(50, {
+                    // liftMove(127, true);
+                    // });
 
-            stopMovementOf(ROBOT_ALL, 25);
+                    stopMovementOf(ROBOT_ALL, 25);
 
-            timerRun(400, { driveMove(100, 0, true); });
+                    timerRun(400, { driveMove(100, 0, true); });
 
-            stopMovementOf(ROBOT_DRIVE, 25);
+                    stopMovementOf(ROBOT_DRIVE, 25);
 
-            timerRun(300, { driveMove(0, -127, true); });
+                    timerRun(300, { driveMove(0, -127, true); });
 
-            stopMovementOf(ROBOT_DRIVE, 150);
+                    stopMovementOf(ROBOT_DRIVE, 150);
 
-            timerRun(1800, {
-                driveMove(0, 100, true);
-                // liftMove(30, true);
-            });
+                    timerRun(1800, {
+                        driveMove(0, 100, true);
+                        // liftMove(30, true);
+                    });
 
-            stopMovementOf(ROBOT_ALL, 1000);
-        }
-*/
+                    stopMovementOf(ROBOT_ALL, 1000);
+                }
+        */
     }
 
     return;

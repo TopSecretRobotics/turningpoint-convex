@@ -111,21 +111,21 @@ vexUserSetup()
     lcdSetup(VEX_LCD_DISPLAY_1);
     // serverSetup(&SD3);
     armSetup(kVexMotor_3 // arm motor
-             );
+    );
     driveSetup(kVexMotor_2, // drive northeast or front-right motor
                kVexMotor_9, // drive northwest or front-left motor
                kVexMotor_8, // drive southeast or back-right motor
                kVexMotor_1  // drive southwest or back-left motor
-               );
+    );
     flipperSetup(kVexMotor_4 // flipper motor
-                 );
+    );
     intakeSetup(kVexMotor_7 // intake motor
-                );
+    );
     liftSetup(kVexMotor_6,  // lift motor
               kVexDigital_3 // lift limit sensor
-              );
+    );
     setterSetup(kVexMotor_5 // setter motor
-                );
+    );
 }
 
 /*-----------------------------------------------------------------------------*/
